@@ -32,8 +32,10 @@ import {
 	rehypeTransformComponents,
 	transformFileTree,
 	transformInContentAd,
+	transformLinkPreview,
 	transformTabs,
 } from "./components";
+import { rehypeLinkPreview } from "./link-preview/rehype-transform";
 
 const currentBranch = process.env.VERCEL_GIT_COMMIT_REF ?? (await branch());
 
@@ -80,6 +82,7 @@ export function createHtmlPlugins(unified: Processor) {
 			.use(rehypeHints)
 			.use(rehypeTooltips)
 			.use(rehypeAstroImageMd)
+			.use(rehypeLinkPreview)
 			.use(rehypeUnicornIFrameClickToRun, {
 				srcReplacements: [
 					(val: string, file: VFile) => {
@@ -111,6 +114,7 @@ export function createHtmlPlugins(unified: Processor) {
 				components: {
 					filetree: transformFileTree,
 					["in-content-ad"]: transformInContentAd,
+					["link-preview"]: transformLinkPreview,
 					["no-ebook"]: ({ children }) => children,
 					["only-ebook"]: () => [],
 					tabs: transformTabs,

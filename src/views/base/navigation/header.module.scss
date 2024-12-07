@@ -29,7 +29,7 @@ header {
 
 	top: -0.1px;
 	position: sticky;
-	z-index: 2;
+	z-index: 3;
 	background-color: var(--background_primary);
 	@include transition(background-color);
 }

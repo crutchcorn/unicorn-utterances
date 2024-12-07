@@ -1,0 +1,74 @@
+@use "src/tokens/index" as *;
+@use "src/styles/text-styles";
+
+:root {
+	--anchored-tooltip_padding_start: var(--spc-2x);
+	--anchored-tooltip_padding_end: var(--spc-3x);
+	--anchored-tooltip_padding_vertical: var(--spc-2x);
+	--anchored-tooltip_icon-size: var(--icon-size_dense);
+
+	--anchored-tooltip_gap: var(--spc-1x);
+	--anchored-tooltip_height: var(--min-target-size_s);
+	--anchored-tooltip_corner-radius: var(--corner-radius_circular);
+	--anchored-tooltip_border-width: var(--border-width_m);
+
+	--anchored-tooltip_background-color_focus: var(--background_focus);
+	--anchored-tooltip_foreground-color_focus: var(--foreground_emphasis-high);
+	--anchored-tooltip_focus_outline_width: var(--border-width_focus);
+	--anchored-tooltip_focus_outline_color: var(--focus-outline_primary);
+}
+
+.anchored-tooltip--zoom {
+	--anchored-tooltip_background-color: var(--background_primary);
+	--anchored-tooltip_foreground-color: var(--foreground_emphasis-high);
+	--anchored-tooltip_border-color: var(--primary_variant);
+}
+
+.anchored-tooltip--link {
+	--anchored-tooltip_background-color: var(--primary_on-variant);
+	--anchored-tooltip_foreground-color: var(--background_primary);
+	--anchored-tooltip_border-color: var(--background_primary);
+}
+
+.anchored-tooltip {
+	display: flex;
+	align-items: center;
+	gap: var(--anchored-tooltip_gap);
+	padding-left: var(--anchored-tooltip_padding_start);
+	padding-right: var(--anchored-tooltip_padding_end);
+	padding-top: var(--anchored-tooltip_padding_vertical);
+	padding-bottom: var(--anchored-tooltip_padding_vertical);
+
+	background-color: var(--anchored-tooltip_background-color);
+	color: var(--anchored-tooltip_foreground-color);
+	@include transition(background-color outline border-color color);
+
+	min-height: var(--anchored-tooltip_height);
+	max-width: 80%;
+	border: var(--anchored-tooltip_border-width) solid var(--anchored-tooltip_border-color);
+	border-radius: var(--anchored-tooltip_corner-radius);
+
+	&> svg {
+		width: var(--anchored-tooltip_icon-size);
+		height: var(--anchored-tooltip_icon-size);
+		flex-shrink: 0;
+	}
+
+	&> span {
+		@extend .text-style-button-regular;
+
+		min-width: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+.anchored-tooltip:focus-visible,
+:focus-visible > .anchored-tooltip {
+	background-color: var(--anchored-tooltip_background-color_focus);
+	color: var(--anchored-tooltip_foreground-color_focus);
+	outline: var(--anchored-tooltip_focus_outline_width) solid var(--anchored-tooltip_focus_outline_color);
+	outline-offset: calc(-1 * var(--anchored-tooltip_border-width));
+	border-color: var(--anchored-tooltip_focus_outline_color);
+}

@@ -13,7 +13,11 @@ import * as fs from "fs";
 import * as stream from "stream";
 import sharp from "sharp";
 import * as svgo from "svgo";
-import { fetchPageHtml, getPageTitle } from "utils/fetch-page-html";
+import {
+	fetchAsBrowser,
+	fetchPageHtml,
+	getPageTitle,
+} from "utils/fetch-page-html";
 import { LRUCache } from "lru-cache";
 
 interface RehypeUnicornIFrameClickToRunProps {
@@ -67,8 +71,8 @@ function fetchPageIcon(src: URL, srcHast: Root): Promise<string> {
 			const manifestRelativeURL = String(manifestPath.properties.href);
 			const fullManifestURL = new URL(manifestRelativeURL, src).href;
 
-			const manifest = await fetch(fullManifestURL)
-				.then((r) => r.status === 200 && r.json())
+			const manifest = await fetchAsBrowser(fullManifestURL)
+				.then((r) => r.json())
 				.catch(() => null);
 
 			if (manifest) {
@@ -110,7 +114,11 @@ function fetchPageIcon(src: URL, srcHast: Root): Promise<string> {
 
 		// If it's an SVG, pipe directly to the output dir
 		if (iconExt === ".svg") {
-			const svg = await fetch(iconHref).then((r) => r.text());
+			const svg = await fetchAsBrowser(iconHref)
+				.then((r) => r.text())
+				.catch(() => null);
+
+			if (!svg) return null;
 			const optimizedSvg = svgo.optimize(svg, { multipass: true });
 			await fs.promises.writeFile(
 				"public/" + iconPath + iconExt,
@@ -125,7 +133,9 @@ function fetchPageIcon(src: URL, srcHast: Root): Promise<string> {
 				fs.mkdirSync(dir, { recursive: true });
 			}
 			const writeStream = fs.createWriteStream("public/" + iconPath + iconExt);
-			const { body } = await fetch(iconHref);
+			const body = await fetchAsBrowser(iconHref)
+				.then((r) => r.body)
+				.catch(() => null);
 			if (!body) return null;
 			const transformer = sharp().resize(24, 24);
 			await stream.promises.finished(

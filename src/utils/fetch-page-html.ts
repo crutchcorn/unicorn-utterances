@@ -1,6 +1,7 @@
 import { Element, Root } from "hast";
 import { fromHtml } from "hast-util-from-html";
 import { find } from "unist-util-find";
+import { isElement } from "./markdown/unist-is-element";
 import { LRUCache } from "lru-cache";
 
 export async function fetchAsBrowser(input: string | URL, init?: RequestInit) {
@@ -51,6 +52,20 @@ export function getPageTitle(srcHast: Root) {
 		titleContentEl?.type === "text" ? titleContentEl.value : undefined;
 
 	return title;
+}
+
+export function getOpenGraphImage(srcHast: Root): string | undefined {
+	const metaNames = ["twitter:image", "og:image"];
+	const metaNode = find<Element>(
+		srcHast,
+		(e) =>
+			isElement(e) &&
+			e.tagName === "meta" &&
+			metaNames.includes(e.properties.property + ""),
+	);
+	if (!metaNode) return undefined;
+
+	return metaNode.properties.content + "";
 }
 
 export function escapeHtml(unsafe: string) {

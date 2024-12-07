@@ -1,6 +1,8 @@
 import type * as hast from "hast";
 import { VFile } from "vfile";
 
+type MaybePromise<T> = Promise<T> | T;
+
 export type RehypeFunctionProps = {
 	vfile: VFile;
 	node: hast.Node;
@@ -10,4 +12,4 @@ export type RehypeFunctionProps = {
 
 export type RehypeFunctionComponent = (
 	props: RehypeFunctionProps,
-) => hast.Node | Array<hast.Node> | undefined;
+) => MaybePromise<hast.Node | Array<hast.Node> | undefined>;

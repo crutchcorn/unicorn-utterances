@@ -10,11 +10,8 @@ import { getPicture } from "utils/get-picture";
 import { getImageSize } from "../../get-image-size";
 import { resolvePath } from "../../url-paths";
 import { Picture } from "./picture";
-import { mobile, tabletSmall } from "src/tokens/breakpoints";
 import { logError } from "../logger";
-
-const MAX_WIDTH = 896;
-const MAX_HEIGHT = 768;
+import { IMAGE_MAX_HEIGHT, IMAGE_MAX_WIDTH, IMAGE_SIZES } from "../constants";
 
 /**
  * parse a height/width attribute value (e.g. "20px" or "20") and
@@ -89,24 +86,21 @@ export const rehypeAstroImageMd: Plugin<[], Root> = () => {
 					dimensions.height = Math.floor(nodeWidth / imageRatio);
 				}
 
-				if (dimensions.height > MAX_HEIGHT) {
-					dimensions.height = MAX_HEIGHT;
-					dimensions.width = Math.floor(MAX_HEIGHT * imageRatio);
+				if (dimensions.height > IMAGE_MAX_HEIGHT) {
+					dimensions.height = IMAGE_MAX_HEIGHT;
+					dimensions.width = Math.floor(IMAGE_MAX_HEIGHT * imageRatio);
 				}
 
-				if (dimensions.width > MAX_WIDTH) {
-					dimensions.width = MAX_WIDTH;
-					dimensions.height = Math.floor(MAX_WIDTH / imageRatio);
+				if (dimensions.width > IMAGE_MAX_WIDTH) {
+					dimensions.width = IMAGE_MAX_WIDTH;
+					dimensions.height = Math.floor(IMAGE_MAX_WIDTH / imageRatio);
 				}
 
 				const pictureResult = getPicture({
 					src: src,
 					width: dimensions.width,
 					height: dimensions.height,
-					sizes: {
-						356: { maxWidth: mobile },
-						596: { maxWidth: tabletSmall },
-					},
+					sizes: IMAGE_SIZES,
 					formats: ["avif", "webp", "png"],
 				});
 

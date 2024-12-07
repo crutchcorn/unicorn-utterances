@@ -5,7 +5,8 @@ import type { Element } from "hast";
 interface PictureProps {
 	result: GetPictureResult;
 	alt?: string;
-	zoomSrc: string;
+	zoomSrc?: string;
+	noZoom?: boolean;
 	imgAttrs: Record<string, unknown>;
 }
 
@@ -22,6 +23,7 @@ export function Picture(props: PictureProps): Element {
 				loading="lazy"
 				decoding="async"
 				data-zoom-src={props.zoomSrc}
+				data-nozoom={props.noZoom}
 				{...props.imgAttrs}
 			/>
 		</picture>

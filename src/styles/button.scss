@@ -44,7 +44,7 @@
 
 	--btn_primary_focus-outline_width: var(--border-width_focus);
 	--btn_primary_focus-outline_gap: var(--border-width_focus);
-	--btn_primary_focus-oultine_color: var(--focus-outline_primary);
+	--btn_primary_focus-outline_color: var(--focus-outline_primary);
 
 	// Colors: Secondary buttons
 	--btn_secondary_background-color_default: var(
@@ -69,7 +69,7 @@
 
 	--btn_secondary_focus-outline_width: var(--border-width_focus);
 	--btn_secondary_focus-outline_gap: var(--border-width_focus);
-	--btn_secondary_focus-oultine_color: var(--focus-outline_secondary);
+	--btn_secondary_focus-outline_color: var(--focus-outline_secondary);
 
 	// Colors: Disabled buttons
 	--btn_disabled_background-color: var(--background_disabled);
@@ -191,7 +191,7 @@
 	&:focus-visible:not([data-focus-visible="false"]),
 	&[data-focus-visible="true"] {
 		outline: var(--btn_primary_focus-outline_width) solid
-			var(--btn_primary_focus-oultine_color);
+			var(--btn_primary_focus-outline_color);
 		outline-offset: var(--btn_primary_focus-outline_gap);
 	}
 
@@ -211,7 +211,7 @@
 	&:focus-visible:not([data-focus-visible="false"]),
 	&[data-focus-visible="true"] {
 		outline: var(--btn_secondary_focus-outline_width) solid
-			var(--btn_secondary_focus-oultine_color);
+			var(--btn_secondary_focus-outline_color);
 		outline-offset: var(--btn_secondary_focus-outline_gap);
 	}
 
@@ -231,7 +231,7 @@
 	&:focus-visible:not([data-focus-visible="false"]),
 	&[data-focus-visible="true"] {
 		outline: var(--btn_primary_focus-outline_width) solid
-			var(--btn_primary_focus-oultine_color);
+			var(--btn_primary_focus-outline_color);
 		outline-offset: var(--btn_primary_focus-outline_gap);
 	}
 
@@ -251,7 +251,7 @@
 	&:focus-visible:not([data-focus-visible="false"]),
 	&[data-focus-visible="true"] {
 		outline: var(--btn_secondary_focus-outline_width) solid
-			var(--btn_secondary_focus-oultine_color);
+			var(--btn_secondary_focus-outline_color);
 		outline-offset: var(--btn_secondary_focus-outline_gap);
 	}
 

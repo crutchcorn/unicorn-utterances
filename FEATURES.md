@@ -214,6 +214,22 @@ We support the following properties:
 - `button-text`: The text of the button
 - `button-href`: The URL that the button links to
 
+### Link Previews
+
+Link previews embed the opengraph image of a link into a blog post. These can be added with:
+
+```markdown
+<!-- ::start:link-preview -->
+[Playful Programming GitHub](https://github.com/playfulprogramming/playfulprogramming)
+<!-- ::end:link-preview -->
+```
+
+These can also be created manually by wrapping an image inside a link, optionally with a title:
+
+```markdown
+[Example Title ![](./link-preview.png)](https://example.com)
+```
+
 ### Tabs
 
 Tabs are a way to organize content in a tabbed interface. They are useful for organizing content that is related but not necessarily sequential.

@@ -27,6 +27,7 @@
 	position: absolute;
 	top: 0;
 	left: calc(-1 * var(--heading-link_padding-start));
+	z-index: 2;
 
 	transform: translateY(-100%);
 	padding-bottom: var(--spc-1x);

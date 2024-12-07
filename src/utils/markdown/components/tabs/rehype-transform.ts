@@ -115,10 +115,8 @@ export const transformTabs: RehypeFunctionComponent = ({ children }) => {
 		// the max difference between tab heights must be under 15 lines
 		Math.max(...tabHeights) - Math.min(...tabHeights) <= 15;
 
-	return [
-		Tabs({
-			tabs,
-			isSmall,
-		}),
-	];
+	return Tabs({
+		tabs,
+		isSmall,
+	});
 };
