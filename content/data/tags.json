@@ -36,6 +36,11 @@
 		"image": "/stickers/chrome.svg",
 		"shownWithBranding": false
 	},
+	"coldfusion": {
+		"displayName": "Adobe ColdFusion",
+		"image": "/stickers/coldfusion.svg",
+		"shownWithBranding": false
+	},
 	"computer science": {
 		"displayName": "Computer Science",
 		"emoji": "🖥️"
