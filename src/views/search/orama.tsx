@@ -6,7 +6,12 @@ import { PropsWithChildren } from "components/types";
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 import { SearchQuery } from "./search";
-import { ORAMA_COLLECTIONS_API_KEY, ORAMA_COLLECTIONS_ENDPOINT, ORAMA_POSTS_API_KEY, ORAMA_POSTS_ENDPOINT } from "./constants";
+import {
+	ORAMA_COLLECTIONS_API_KEY,
+	ORAMA_COLLECTIONS_ENDPOINT,
+	ORAMA_POSTS_API_KEY,
+	ORAMA_POSTS_ENDPOINT,
+} from "./constants";
 
 const postSchema = {
 	slug: "string",
@@ -48,13 +53,13 @@ export function OramaClientProvider(props: OramaClientProviderProps) {
 	const postClient = new OramaClient({
 		endpoint: ORAMA_POSTS_ENDPOINT,
 		api_key: ORAMA_POSTS_API_KEY,
-		...props.params
+		...props.params,
 	});
 
 	const collectionClient = new OramaClient({
 		endpoint: ORAMA_COLLECTIONS_ENDPOINT,
 		api_key: ORAMA_COLLECTIONS_API_KEY,
-		...props.params
+		...props.params,
 	});
 
 	const context: SearchContext = { postClient, collectionClient };
@@ -69,7 +74,8 @@ export function OramaClientProvider(props: OramaClientProviderProps) {
 export function useOramaSearch() {
 	const searchCtx = useContext(SearchClient);
 	return {
-		searchForTerm: (query: SearchQuery, signal: AbortSignal) => searchForTerm(searchCtx, query, signal),
+		searchForTerm: (query: SearchQuery, signal: AbortSignal) =>
+			searchForTerm(searchCtx, query, signal),
 	};
 }
 
@@ -77,19 +83,32 @@ export function useOramaSearch() {
  * Given two Record<string, number>, combines them into one record, summing any overlapping entries.
  * Ex. addMerge({a:1,b:2}, {b:1}) -> {a:1,b:3}
  */
-function addMerge(obj1: Record<string, number>, obj2: Record<string, number>): Record<string, number> {
+function addMerge(
+	obj1: Record<string, number>,
+	obj2: Record<string, number>,
+): Record<string, number> {
 	return Object.entries(obj2).reduce(
 		(acc, [key, value]) => ({ ...acc, [key]: (acc[key] || 0) + value }),
 		{ ...obj1 },
 	);
 }
 
-export async function searchForTerm({ postClient, collectionClient }: SearchContext, query: SearchQuery, signal: AbortSignal) {
+export async function searchForTerm(
+	{ postClient, collectionClient }: SearchContext,
+	query: SearchQuery,
+	signal: AbortSignal,
+) {
 	const term = query.searchQuery === "*" ? "" : query.searchQuery;
-	const sortBy: SortByClauseUnion | undefined = query.sort === "relevance"
-		// When term is empty (returning all results), there is no "relevance" to sort by - so this defaults to a sort by newest
-		? (term.length > 0 ? undefined : { property: "publishedTimestamp", order: "desc" })
-		: { property: "publishedTimestamp", order: query.sort === "newest" ? "desc" : "asc" };
+	const sortBy: SortByClauseUnion | undefined =
+		query.sort === "relevance"
+			? // When term is empty (returning all results), there is no "relevance" to sort by - so this defaults to a sort by newest
+				term.length > 0
+				? undefined
+				: { property: "publishedTimestamp", order: "desc" }
+			: {
+					property: "publishedTimestamp",
+					order: query.sort === "newest" ? "desc" : "asc",
+				};
 
 	// Schema should be passed to `search` method when:
 	// https://github.com/askorama/oramacloud-client-javascript/pull/35
@@ -99,7 +118,7 @@ export async function searchForTerm({ postClient, collectionClient }: SearchCont
 			{
 				term,
 				limit: 6,
-				offset: 6 * (query.searchPage-1),
+				offset: 6 * (query.searchPage - 1),
 				sortBy,
 				where: {
 					tags: query.filterTags.length ? query.filterTags : undefined,
@@ -113,6 +132,7 @@ export async function searchForTerm({ postClient, collectionClient }: SearchCont
 						limit: 50,
 					},
 				},
+				mode: "hybrid",
 			},
 			{
 				debounce: 0,
@@ -129,7 +149,7 @@ export async function searchForTerm({ postClient, collectionClient }: SearchCont
 		{
 			term,
 			limit: 4,
-			offset: 4 * (query.searchPage-1),
+			offset: 4 * (query.searchPage - 1),
 			sortBy,
 			where: {
 				tags: query.filterTags.length ? query.filterTags : undefined,
@@ -143,6 +163,7 @@ export async function searchForTerm({ postClient, collectionClient }: SearchCont
 					limit: 50,
 				},
 			},
+			mode: "hybrid",
 		},
 		{
 			debounce: 0,
@@ -159,19 +180,19 @@ export async function searchForTerm({ postClient, collectionClient }: SearchCont
 	// Combine tags & authors facets between the two searches
 	const tags = addMerge(
 		postSearch?.facets?.tags?.values ?? {},
-		collectionSearch?.facets?.tags?.values ?? {}
+		collectionSearch?.facets?.tags?.values ?? {},
 	);
 
 	const authors = addMerge(
 		postSearch?.facets?.authors?.values ?? {},
-		collectionSearch?.facets?.authors?.values ?? {}
+		collectionSearch?.facets?.authors?.values ?? {},
 	);
 
 	const duration = Math.round(
 		Math.max(
 			postSearch?.elapsed?.raw ?? 0,
 			collectionSearch?.elapsed?.raw ?? 0,
-		) / 1000000
+		) / 1000000,
 	);
 
 	return {
