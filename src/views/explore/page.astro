@@ -8,11 +8,12 @@ import { isDefined } from "utils/is-defined";
 
 export interface PageProps {
 	posts: PostInfo[];
-	page: Pick<Page, "currentPage" | "lastPage">;
+	currentPage: number;
+	lastPage: number;
 	locale: Languages;
 }
 
-const { posts, page, locale } = Astro.props as PageProps;
+const { posts, currentPage, lastPage, locale } = Astro.props as PageProps;
 
 const postAuthors = new Map(
 	[...new Set(posts.flatMap((p) => p.authors))]
@@ -35,7 +36,7 @@ const postAuthors = new Map(
 	/* We shouldn't pass the whole "page" object here, as this generates a huge JSON attribute for hydration */
 }
 <Pagination
-	page={{ currentPage: page.currentPage, lastPage: page.lastPage }}
+	page={{ currentPage: currentPage, lastPage: lastPage }}
 	rootURL="/page/"
 	client:load
 />

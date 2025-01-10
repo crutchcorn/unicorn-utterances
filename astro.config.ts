@@ -28,6 +28,7 @@ export default defineConfig({
 		},
 		devImageService: "sharp",
 	}),
+	output: "server",
 	integrations: [
 		icon(),
 		preact({ compat: true }),
