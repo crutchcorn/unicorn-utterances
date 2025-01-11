@@ -919,7 +919,7 @@ function App() {
 
 ## Angular
 
-We can adopt the above code and place it within our `ngAfterViewInit` lifecycle method to add the `addEventListener` to our context menu.
+Let's adopt the above click listener and apply it within `afterRenderEffect`.
 
 Additionally, we'll use `ViewChild` to track the `contextMenu` element and `.focus` it when it becomes active.
 
