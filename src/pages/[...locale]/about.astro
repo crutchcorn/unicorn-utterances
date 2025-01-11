@@ -8,35 +8,28 @@ import { join } from "path";
 import { contentDirectory } from "utils/data";
 import { Languages } from "types/index";
 
-export async function getStaticPaths() {
-	const files = (await fs.readdir(join(contentDirectory, "site")))
-		.filter((filename) => filename.startsWith("about-us"))
-		.map((filename) => ({
-			file: join(contentDirectory, "site", filename),
-			locale: getLanguageFromFilename(filename),
-		}));
-
-	return files.map((data) => {
-		return {
-			params: {
-				locale: data.locale !== "en" ? data.locale : undefined,
-			},
-			props: {
-				file: data.file,
-				locales: files.map((d) => d.locale),
-				locale: data.locale,
-			},
-		};
-	});
-}
-
-interface Props {
-	file: string;
-	locales: Languages[];
+const params = Astro.params as {
 	locale: Languages;
+};
+
+const locale = params.locale && params.locale !== "en" ? params.locale : "en";
+
+const siteFiles = await fs.readdir(join(contentDirectory, "site"));
+
+let locales = [] as Languages[];
+let file = null;
+
+for (const siteFileName of siteFiles) {
+	if (!siteFileName.startsWith("about-us")) continue;
+	const fileLocale = getLanguageFromFilename(siteFileName);
+	locales.push(fileLocale);
+	if (fileLocale !== locale) continue;
+	file = join(contentDirectory, "site", siteFileName);
 }
 
-const { file, locales, locale } = Astro.props as Props;
+if (!file) {
+	return Astro.redirect("/404");
+}
 ---
 
 <Document>

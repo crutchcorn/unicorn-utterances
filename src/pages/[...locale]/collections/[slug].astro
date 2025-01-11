@@ -10,28 +10,6 @@ import { translate } from "utils/translations";
 import { Languages } from "types/index";
 import { getMarkdownHtml } from "utils/markdown";
 
-export async function getStaticPaths() {
-	const collections = api.getAllCollections();
-
-	return collections
-		.filter((collection) => collection.pageLayout !== "none")
-		.map((collection) => {
-			return {
-				params: {
-					locale: collection.locale !== "en" ? collection.locale : undefined,
-					slug: collection.slug,
-				},
-				props: {},
-			};
-		});
-}
-
-interface CollectionProps {
-	Content: MarkdownInstance<never>["Content"];
-}
-
-const { Content } = Astro.props as CollectionProps;
-
 const params = Astro.params as {
 	locale?: Languages;
 	slug: string;
@@ -39,6 +17,11 @@ const params = Astro.params as {
 
 const locale = params.locale || "en";
 const collection = api.getCollectionBySlug(params.slug, locale)!;
+
+if (!collection || collection.pageLayout === "none") {
+	return Astro.redirect("/404");
+}
+
 const collectionPosts = api.getPostsByCollection(params.slug, locale);
 const authors = collection.authors.map(
 	(authorId) => api.getPersonById(authorId, locale)!,

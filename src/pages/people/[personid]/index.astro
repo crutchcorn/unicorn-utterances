@@ -5,15 +5,15 @@ import PersonPage from "src/views/person/person-page.astro";
 import { Languages } from "types/index";
 import * as api from "utils/api";
 
-export async function getStaticPaths() {
-	const people = api.getPeopleByLang("en");
-	return people.map((person) => ({ params: { personid: person.id } }));
-}
-
 const params = Astro.params as { personid: string };
 
 const locale: Languages = "en";
 const person = api.getPersonById(params.personid, locale)!;
+
+if (!person) {
+	return Astro.redirect("/404");
+}
+
 const posts = api.getPostsByPerson(person.id, locale);
 ---
 

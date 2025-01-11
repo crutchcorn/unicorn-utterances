@@ -1,0 +1,259 @@
+---
+import { codeToHtml } from "utils/markdown/shiki/rehype-transform";
+import { tokenizeMessage } from "./parse-message";
+import "../../styles/shiki.scss";
+import { formatDiscordCreated, formatDiscordTimestamp } from "./date-utils";
+
+interface DiscordUser {
+	name: string;
+	profilePhoto: string;
+	roleColor: string | null | undefined;
+}
+
+interface Reaction {
+	name: string | null;
+	image: string | null;
+	count: number;
+}
+
+interface Sticker {
+	name: string;
+	image: string;
+}
+
+interface Props {
+	content: string;
+	lookupUser: (id: string) => Promise<DiscordUser>;
+	lookupRoleName: (id: string) => Promise<string>;
+	lookupChannelName: (id: string) => Promise<string>;
+	author: DiscordUser;
+	// True if a single message is being displayed, false if multiple messages are being displayed from the same user, just like Discord
+	includeHeader: boolean;
+	reactions: Reaction[];
+	stickers: Sticker[];
+	edited: boolean;
+	created: Date;
+}
+
+const {
+	content,
+	author,
+	reactions,
+	stickers,
+	edited,
+	created,
+	lookupUser,
+	lookupRoleName,
+	lookupChannelName,
+	includeHeader = true,
+} = Astro.props;
+
+const tokens = tokenizeMessage(content);
+---
+
+<style>
+	.discordMsgContainer {
+		position: relative;
+	}
+	.profilePic {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+
+		position: absolute;
+		left: 16px;
+	}
+
+	.authorName {
+		position: relative;
+		left: calc(16px + 40px + 8px);
+		line-height: 1.375rem;
+		min-height: 1.375rem;
+		white-space: break-spaces;
+		word-wrap: pre-wrap;
+		font-size: 100%;
+		margin: 0;
+	}
+
+	.createdDate {
+		font-size: 0.75rem;
+		line-height: 1.375rem;
+		font-weight: 400;
+		margin-left: 0.25rem;
+		vertical-align: baseline;
+	}
+
+	.messageContents {
+		position: relative;
+		left: calc(16px + 40px + 8px);
+		white-space: pre-line;
+	}
+
+	.reactionsBar {
+		position: relative;
+		left: calc(16px + 40px + 8px);
+		margin-top: 0.25rem;
+	}
+
+	.reactionItem {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.125rem 0.375rem;
+		position: relative;
+		border: 0.0625rem solid transparent;
+		background-color: color-mix(
+			in oklab,
+			hsl(222.857 calc(1 * 5.833%) 52.941% / 0.16) 100%,
+			hsl(241.1764705882353 100% 90% / 0.16) 50%
+		);
+		border-color: color-mix(
+			in oklab,
+			hsl(0 calc(1 * 0%) 0% / 0.16) 100%,
+			hsl(241.1764705882353 100% 90% / 0.16) 50%
+		);
+		border-radius: 0.5rem;
+		margin-right: 0.25rem;
+		margin-bottom: 0.25rem;
+	}
+
+	.reactionCount {
+		margin-left: 0.375rem;
+	}
+</style>
+
+<div
+	class="discordMsgContainer"
+	style={includeHeader ? "margin-top: 16px" : ""}
+>
+	{
+		includeHeader && (
+			<Fragment>
+				<img
+					class="profilePic"
+					src={author.profilePhoto}
+					alt={author.name}
+				/>
+
+				<h1 class="authorName">
+					<span style={`color: ${author.roleColor}`}>
+						{author.name}
+					</span>
+					<span class="createdDate">
+						{formatDiscordCreated(created)}
+					</span>
+				</h1>
+			</Fragment>
+		)
+	}
+	<div class="messageContents">
+		{
+			tokens.map(async (token) => {
+				if (token.type === "text") {
+					return token.content;
+				}
+
+				if (token.type === "mention") {
+					const mentionedUser = await lookupUser(token.id);
+					return (
+						<span style="background-color: lightblue; color: blue">
+							@{mentionedUser.name}
+						</span>
+					);
+				}
+
+				if (token.type === "roleMention") {
+					const roleName = await lookupRoleName(token.id);
+					return (
+						<span style="background-color: lightblue; color: blue">
+							@{roleName}
+						</span>
+					);
+				}
+
+				if (token.type === "channel") {
+					const channelName = await lookupChannelName(token.id);
+					return (
+						<span style="background-color: lightblue; color: blue">
+							#{channelName}
+						</span>
+					);
+				}
+
+				if (token.type === "timestamp") {
+					return (
+						<span style="color: gray">
+							{formatDiscordTimestamp(token.timestamp, token.format)}
+						</span>
+					);
+				}
+
+				if (token.type === "codeInline") {
+					return <code>{token.content}</code>;
+				}
+
+				if (token.type === "codeBlock") {
+					const code = await codeToHtml(token.content, token.lang);
+					return <Fragment set:html={code} />;
+				}
+
+				if (token.type === "emoji" && token.animated) {
+					return (
+						<img
+							height="16"
+							src={`https://cdn.discordapp.com/emojis/${token.id}.gif`}
+							alt={token.name}
+						/>
+					);
+				} else if (token.type === "emoji") {
+					return (
+						<img
+							height="16"
+							src={`https://cdn.discordapp.com/emojis/${token.id}.png`}
+							alt={token.name}
+						/>
+					);
+				}
+
+				return null;
+			})
+		}
+		{
+			edited && (
+				<span style="color: gray; font-size: 0.75rem">(Edited)</span>
+			)
+		}
+		{
+			stickers.length > 0 && (
+				<div>
+					{stickers.map((sticker) => (
+						<img
+							height="160"
+							src={sticker.image}
+							alt={sticker.name}
+						/>
+					))}
+				</div>
+			)
+		}
+	</div>
+	{
+		reactions.length > 0 && (
+			<div class="reactionsBar">
+				{reactions.map((reaction) => (
+					<span class="reactionItem">
+						{reaction.image ? (
+							<img
+								height="16"
+								src={reaction.image}
+								alt={reaction.name}
+							/>
+						) : (
+							<span>{reaction.name}</span>
+						)}
+						<span class="reactionCount">{reaction.count}</span>
+					</span>
+				))}
+			</div>
+		)
+	}
+</div>

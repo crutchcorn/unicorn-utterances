@@ -2,29 +2,32 @@
 import Document from "../../layouts/document.astro";
 import PageView from "src/views/explore/page.astro";
 import { getPostsByLang } from "utils/api";
-import { PostInfo } from "types/index";
 import SEO from "components/seo/seo.astro";
 import type { Page } from "astro";
-import { GetStaticPaths } from "astro";
 
-export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-	const postsToDisplay = getPostsByLang("en");
+const posts = getPostsByLang("en");
 
-	return paginate(postsToDisplay, { pageSize: 8 });
-};
+const { page } = Astro.params as { page: string };
 
-const { page } = Astro.props as { page: Page<PostInfo> };
+const currentPage = parseInt(page, 10);
 
-const pageIndex = page.currentPage;
+const postsPerPage = 8;
 
-const SEOTitle = `Post page ${pageIndex}`;
+const data = posts.slice(
+	(currentPage - 1) * postsPerPage,
+	currentPage * postsPerPage,
+);
 
-const SEODescription = `Browse all posts on Playful Programming, page ${pageIndex}`;
+const lastPage = Math.ceil(posts.length / postsPerPage);
+
+const SEOTitle = `Post page ${currentPage}`;
+
+const SEODescription = `Browse all posts on Playful Programming, page ${currentPage}`;
 ---
 
 <Document>
 	<SEO slot="head" title={SEOTitle} description={SEODescription} />
 	<main class="container">
-		<PageView posts={page.data} page={page} />
+		<PageView posts={data} currentPage={currentPage} lastPage={lastPage} />
 	</main>
 </Document>

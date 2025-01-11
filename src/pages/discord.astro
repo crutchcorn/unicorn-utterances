@@ -1,0 +1,122 @@
+---
+import { Client, GatewayIntentBits, TextChannel } from "discord.js";
+import Document from "../layouts/document.astro";
+import DiscordMessage from "components/discord-message/discord-message.astro";
+
+// Create a new client instance
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildEmojisAndStickers,
+	],
+});
+
+// Log in to Discord with your client's token
+await client.login(import.meta.env.DISCORD_TOKEN);
+
+// Replace 'YOUR_GUILD_ID' with your actual guild ID
+const guild = await client.guilds.fetch(import.meta.env.DISCORD_GUILD_ID);
+if (!guild) {
+	return Astro.redirect("/404");
+}
+
+const channels = await guild.channels.fetch();
+const channel = Array.from(channels.values()).find(
+	(ch) => ch?.name === "webdev" && ch?.isTextBased(),
+) as TextChannel;
+
+if (!channel) {
+	return Astro.redirect("/404");
+}
+
+const messagesCollection = await channel.messages.fetch({ limit: 10 });
+const messagesArr = Array.from(messagesCollection.values()).sort(
+	(a, b) => a.createdTimestamp - b.createdTimestamp,
+);
+
+async function lookupUser(id: string) {
+	const user = await guild.members.fetch(id);
+	return {
+		name: user.displayName,
+		profilePhoto: user.user.displayAvatarURL(),
+		roleColor: user.displayHexColor,
+	};
+}
+
+async function lookupChannelName(id: string) {
+	const channel = await guild.channels.fetch(id);
+	return channel!.name;
+}
+
+async function lookupRoleName(id: string) {
+	const role = await guild.roles.fetch(id);
+	return role!.name;
+}
+---
+
+<Document>
+	<ul
+		style="list-style: none; margin: 0 auto; padding: 1rem; max-width: 720px;"
+	>
+		{
+			Promise.all(
+				messagesArr.map(async (message, idx, arr) => {
+					// Remove system messages like "Corbin pinned a message to this channel"
+					if ( message.system) return null;
+
+					const shouldGroupWithLastMessage =
+						idx > 0 &&
+						message.author.id === arr[idx - 1].author.id &&
+						message.createdTimestamp -
+							arr[idx - 1].createdTimestamp <
+							60000;
+					const includeHeader = !shouldGroupWithLastMessage;
+					const partialAuthor = includeHeader
+						? await lookupUser(message.author.id)
+						: // Info is not needed, so we can remove an await here
+							{
+								name: "",
+								profilePhoto: "",
+								roleColor: "",
+							};
+
+					const reactions = Array.from(
+						message.reactions.cache.values(),
+					).map((reaction) => ({
+						name: reaction.emoji.name,
+						image: reaction.emoji.imageURL({
+							extension: reaction.emoji.animated ? "gif" : "png",
+						}),
+						count: reaction.count,
+					}));
+
+					const stickers = Array.from(message.stickers.values()).map(
+						(sticker) => ({
+							name: sticker.name,
+							image: sticker.url,
+						}),
+					);
+
+					return (
+						<li>
+							<DiscordMessage
+								includeHeader={includeHeader}
+								content={message.content}
+								author={partialAuthor}
+								reactions={reactions}
+								stickers={stickers}
+								edited={!!message.editedTimestamp}
+								created={message.createdAt}
+								lookupUser={lookupUser}
+								lookupRoleName={lookupRoleName}
+								lookupChannelName={lookupChannelName}
+							/>
+						</li>
+					);
+				}),
+			)
+		}
+	</ul>
+</Document>
