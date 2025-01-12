@@ -5,11 +5,10 @@ import {
 	GetPictureUrls,
 } from "utils/get-picture";
 import type { JSX } from "preact";
-
 interface PictureProps extends GetPictureOptions {
 	urls?: GetPictureUrls;
-	alt: string;
-	class?: string;
+                       	alt: string;
+                       	class?: string;
 	pictureAttrs?: JSX.HTMLAttributes<HTMLPictureElement> &
 		Record<string, unknown>;
 	imgAttrs?: JSX.HTMLAttributes<HTMLImageElement> & Record<string, unknown>;
