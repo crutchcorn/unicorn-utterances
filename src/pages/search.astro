@@ -2,6 +2,7 @@
 import SearchPage from "../views/search/search-page";
 import Document from "../layouts/document.astro";
 import SEO from "../components/seo/seo.astro";
+import { siteMetadata } from "constants/site-config";
 ---
 
 <Document lang={"en"} size="xl">
@@ -10,5 +11,5 @@ import SEO from "../components/seo/seo.astro";
 		description="Find your favorite articles and collections on Playful Programming easier than ever!"
 		slot="head"
 	/>
-	<SearchPage client:only="preact" />
+	<SearchPage client:only="preact" siteTitle={siteMetadata.title} />
 </Document>
