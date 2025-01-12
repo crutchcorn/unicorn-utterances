@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import type { ImageMetadata } from "astro";
+import { siteUrl } from "../constants/site-config";
 
 export interface GetPictureSizes {
 	[size: number]: {
@@ -42,7 +43,11 @@ function getSupportedWidth(width: number) {
 
 const isDev = Boolean(import.meta.env?.DEV);
 
-function getSource(src: string, width: number) {
+const cloudName = process.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
+if (!isDev && !cloudName)
+	console.error("missing public variable CLOUDINARY_CLOUD_NAME");
+
+function getSource(src: string, width: number, getFormat: string) {
 	if (isDev) {
 		// If the dev server is running, we can use the /_image endpoint
 		return `/_image?${new URLSearchParams({
@@ -51,12 +56,9 @@ function getSource(src: string, width: number) {
 			q: "100",
 		})}`;
 	} else {
-		// Otherwise, use Vercel's Image Optimization API
-		return `/_vercel/image?${new URLSearchParams({
-			url: src,
-			w: String(width),
-			q: "100",
-		})}`;
+		// If in production use cloudinary's fetch
+		const domainUrl = new URL(src, siteUrl);
+		return `https://res.cloudinary.com/${cloudName}/image/fetch/w_${width},f_${getFormat},q_auto/${encodeURIComponent(domainUrl.toString())}`;
 	}
 }
 
@@ -76,7 +78,7 @@ export function getPictureUrls(options: GetPictureOptions): GetPictureUrls {
 
 		for (const width of widths) {
 			const supportedWidth = getSupportedWidth(width);
-			formatUrls[supportedWidth] = getSource(src, supportedWidth);
+			formatUrls[supportedWidth] = getSource(src, supportedWidth, format);
 		}
 	}
 
