@@ -156,3 +156,13 @@ This is regular text.
 # Heading `with a code snippet` inside of it
 
 # Heading [with a link](https://example.com) inside of it
+
+# Quiz Components
+
+<!-- ::start:quiz-radio -->
+## Based on what you’ve seen: Why does JS? {#why-does-js}
+- ( ) Option 1 {#1}
+- (x) Option 2 {#2}
+- ( ) Option 3 {#3}
+- ( ) Option 4 {#4}
+<!-- ::end:quiz-radio -->

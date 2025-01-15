@@ -27,6 +27,7 @@ import RelatedPosts from "components/related-posts/related-posts.astro";
 import { LargeButton } from "../../components/button/button";
 
 import styles from "./blog-post.module.scss";
+import { enableQuizRadios } from "../../utils/markdown/components/quiz-radio/quiz-radio-script";
 
 export interface Props {
 	post: PostInfo;
@@ -59,6 +60,10 @@ const GHLink = `https://github.com/${siteMetadata.repoPath}/tree/main/content/${
 <script>
 	import { enableTabs } from "../../utils/markdown/components/tabs/tabs-script";
 	enableTabs();
+</script>
+<script>
+	import { enableQuizRadios } from "../../utils/markdown/components/quiz-radio/quiz-radio-script";
+	enableQuizRadios();
 </script>
 <script>
 	import { enableShikiTabindex } from "../../utils/markdown/shiki/shiki-tabindex-script";

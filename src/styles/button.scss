@@ -260,8 +260,8 @@
 	}
 }
 
-.button[disabled],
-.button[aria-disabled="true"]:not([data-not-actually-disabled="true"]) {
+.button[disabled]:not([disabled="false"]),
+.button[aria-disabled]:not([aria-disabled="false"]) {
 	text-decoration: none;
 	pointer-events: none;
 	background-color: var(--btn_disabled_background-color);

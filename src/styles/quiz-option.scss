@@ -1,0 +1,408 @@
+:root {
+	--quiz-option_unselected_background-color_default: var(--transparent);
+	--quiz-option_unselected_background-color_hovered: var(
+		--surface_primary_emphasis-medium
+	);
+	--quiz-option_unselected_background-color_pressed: var(
+		--surface_primary_emphasis-high
+	);
+	--quiz-option_unselected_background-color_focused: var(--background_focus);
+	--quiz-option_unselected_foreground-color_default: var(
+		--foreground_emphasis-medium
+	);
+	--quiz-option_unselected_foreground-color_interaction: var(
+		--foreground_emphasis-high
+	);
+
+	--quiz-option_selected_background-color_default: var(
+		--surface_primary_emphasis-low
+	);
+	--quiz-option_selected_background-color_hovered: var(
+		--surface_primary_emphasis-medium
+	);
+	--quiz-option_selected_background-color_pressed: var(
+		--surface_primary_emphasis-high
+	);
+	--quiz-option_selected_background-color_focused: var(--background_focus);
+	--quiz-option_selected_foreground-color: var(--primary_on-variant);
+
+	--quiz-option_correct_background-color: var(--primary_variant);
+	--quiz-option_correct_text-color: var(--primary_on-variant);
+
+	// Radio button color overrides
+	--quiz-option_correct_icon-color: var(--primary_on-default);
+	--quiz-option_correct_icon-bg-color: var(--primary_default);
+
+	--quiz-option_incorrect_background-color: var(
+		--surface_secondary_emphasis-medium
+	);
+	--quiz-option_incorrect_text-color: var(--secondary_on-variant);
+
+	// Radio button color overrides
+	--quiz-option_incorrect_icon-color: var(--secondary_on-default);
+	--quiz-option_incorrect_icon-bg-color: var(--secondary_default);
+
+	--quiz-option_focus-outline_width: var(--border-width_focus);
+	--quiz-option_focus-outline_color: var(--focus-outline_primary);
+	--quiz-option_corner-radius: var(--corner-radius_l);
+	--quiz-option_icon_size: var(--icon-size_regular);
+
+	--quiz-option_padding-vertical: var(--spc-3x);
+	--quiz-option_padding-left: var(--spc-3x);
+	--quiz-option_padding-right: var(--spc-6x);
+	--quiz-option_gap: var(--spc-3x);
+	--quiz-option_row_padding-horizontal: var(--spc-3x);
+
+	--quiz_background-color: var(--surface_primary_emphasis-none);
+	--quiz_corner-radius: var(--corner-radius_xl);
+
+	// Error handling
+	--quiz_error_background-color: var(--surface_error_emphasis-low);
+	--quiz_error_foreground-color: var(--error_default);
+	--quiz_error_corner-radius: var(--corner-radius_l);
+}
+
+.quizOptionContainer {
+	background-color: var(--quiz_background-color);
+	border-radius: var(--quiz_corner-radius);
+	width: fit-content;
+	max-width: 100%;
+}
+
+.quizOptionContainer > fieldset {
+	all: unset;
+}
+
+.quizOptionTitle {
+	all: unset;
+	display: block;
+	padding: var(--spc-8x) var(--spc-6x) var(--spc-4x) var(--spc-6x);
+}
+
+.quizOptionTitle > * {
+	display: contents;
+}
+
+.quizOptionBottomContainer {
+	padding: var(--spc-3x);
+}
+
+.quizOptionButtonRowContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	gap: var(--spc-3x);
+	padding: var(--spc-3x);
+}
+
+.quizOptionButtonContainer,
+.quizOptionVotes {
+	display: flex;
+	align-items: center;
+}
+
+.quizOptionVotes {
+	margin: 0 !important;
+}
+
+.quizOptionOptionsContainer {
+	display: flex;
+	flex-direction: column;
+	// TODO: Double-check with Ed?
+	gap: var(--quiz-option_gap);
+	padding-left: var(--quiz-option_row_padding-horizontal);
+	padding-right: var(--quiz-option_row_padding-horizontal);
+}
+
+.quizOptionOptionContainer {
+	position: relative;
+	width: 100%;
+}
+
+.quizOptionOptionInnerContainer {
+	width: fit-content;
+	padding: var(--quiz-option_padding-vertical) var(--quiz-option_padding-right)
+		var(--quiz-option_padding-vertical) var(--quiz-option_padding-left);
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	border-radius: var(--quiz-option_corner-radius);
+}
+
+/**
+ * Checked state
+ */
+.quizOptionOptionContainer:has(.quizOptionOptionInput:checked)
+	.quizOptionOptionInnerContainer {
+	color: var(--quiz-option_selected_foreground-color);
+	background-color: var(--quiz-option_selected_background-color_default);
+}
+
+/**
+ * Checked hover state
+ */
+.quizOptionOptionContainer:has(.quizOptionOptionInput:checked):not(
+		:has(.quizOptionOptionInput:disabled)
+	):hover
+	.quizOptionOptionInnerContainer {
+	background-color: var(--quiz-option_selected_background-color_hovered);
+}
+
+/**
+ * Checked active state
+ */
+.quizOptionOptionContainer:has(.quizOptionOptionInput:checked):not(
+		:has(.quizOptionOptionInput:disabled)
+	):has(:active)
+	.quizOptionOptionInnerContainer {
+	background-color: var(--quiz-option_selected_background-color_pressed);
+}
+
+/**
+ * Focus state
+ */
+.quizOptionOptionContainer:has(*:focus-visible)
+	.quizOptionOptionInnerContainer {
+	outline: var(--quiz-option_focus-outline_width) solid
+		var(--quiz-option_focus-outline_color);
+}
+
+/**
+ * Checked focus state
+ */
+.quizOptionOptionContainer:has(.quizOptionOptionInput:checked):has(
+		*:focus-visible
+	)
+	.quizOptionOptionInnerContainer {
+	background-color: var(--quiz-option_selected_background-color_focused);
+}
+
+/**
+ * Unselected state
+ */
+.quizOptionOptionContainer:not(:has(.quizOptionOptionInput:checked))
+	.quizOptionOptionInnerContainer {
+	color: var(--quiz-option_unselected_foreground-color_default);
+	background-color: var(--quiz-option_unselected_background-color_default);
+}
+
+/**
+ * Unselected hover state
+ */
+.quizOptionOptionContainer
+	:not(:has(.quizOptionOptionInput:checked)):not(
+		:has(.quizOptionOptionInput:disabled)
+	):hover
+	.quizOptionOptionInnerContainer {
+	background-color: var(--quiz-option_unselected_background-color_hovered);
+}
+
+/**
+ * Unselected checked state
+ */
+.quizOptionOptionContainer:not(:has(.quizOptionOptionInput:checked)):not(
+		:has(.quizOptionOptionInput:disabled)
+	):has(:active)
+	.quizOptionOptionInnerContainer {
+	background-color: var(--quiz-option_unselected_background-color_pressed);
+}
+
+/**
+ * Unselected focused state
+ */
+.quizOptionOptionContainer:not(:has(.quizOptionOptionInput:checked)):has(
+		*:focus-visible
+	)
+	.quizOptionOptionInnerContainer {
+	background-color: var(--quiz-option_unselected_background-color_focused);
+}
+
+/**
+ * General purpose SVG logic
+ */
+.quizOptionOptionCheckboxSvgContainer {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--quiz-option_icon_size);
+	height: var(--quiz-option_icon_size);
+	border-radius: var(--quiz-option_corner-radius);
+	border: 2px solid black;
+	// TODO: Double-check with Ed?
+	margin-right: var(--quiz-option_gap);
+}
+
+.quizOptionOptionCheckboxCheckmarkSvgContainer,
+.quizOptionOptionCheckboxDotSvgContainer,
+.quizOptionOptionCheckboxCloseSvgContainer,
+.quizOptionOptionCheckboxCheckmarkSvgContainer > svg,
+.quizOptionOptionCheckboxDotSvgContainer > svg,
+.quizOptionOptionCheckboxCloseSvgContainer > svg {
+	height: 100%;
+	width: 100%;
+}
+
+/**
+ * Checked state
+ *
+ * - Hide dot
+ * - Show checkmark
+ */
+.quizOptionOptionContainer:has(.quizOptionOptionInput:checked) {
+	.quizOptionOptionCheckboxDotSvgContainer {
+		display: none;
+	}
+	.quizOptionOptionCheckboxCloseSvgContainer {
+		display: none;
+	}
+	.quizOptionOptionCheckboxCheckmarkSvgContainer {
+		display: block;
+	}
+}
+
+/**
+ * Unchecked state
+ *
+ * - Hide dot
+ * - Hide checkmark
+ */
+.quizOptionOptionContainer:not(:has(.quizOptionOptionInput:checked)) {
+	.quizOptionOptionCheckboxDotSvgContainer {
+		display: none;
+	}
+	.quizOptionOptionCheckboxCloseSvgContainer {
+		display: none;
+	}
+	.quizOptionOptionCheckboxCheckmarkSvgContainer {
+		display: none;
+	}
+}
+
+/**
+ * Pressed state
+ *
+ * - Show dot (FORCE)
+ * - Hide checkmark (FORCE)
+ */
+.quizOptionOptionContainer:not(:has(.quizOptionOptionInput:disabled)):has(
+		:active
+	) {
+	.quizOptionOptionCheckboxDotSvgContainer {
+		display: block !important;
+	}
+	.quizOptionOptionCheckboxCloseSvgContainer {
+		display: none !important;
+	}
+	.quizOptionOptionCheckboxCheckmarkSvgContainer {
+		display: none !important;
+	}
+}
+
+/**
+ * Incorrect option state should:
+ * - Show close icon
+ * - Hide checkmark
+ * - Hide dot
+ */
+.quizOptionOptionIncorrect .quizOptionOptionInnerContainer {
+	background-color: var(--quiz-option_incorrect_background-color) !important;
+	color: var(--quiz-option_incorrect_text-color) !important;
+}
+
+.quizOptionOptionIncorrect .quizOptionOptionCheckboxSvgContainer {
+	background-color: var(--quiz-option_incorrect_icon-bg-color);
+	border-color: var(--quiz-option_incorrect_icon-bg-color);
+	color: var(--quiz-option_incorrect_icon-color);
+}
+
+.quizOptionOptionIncorrect {
+	.quizOptionOptionCheckboxCloseSvgContainer {
+		display: block !important;
+	}
+	.quizOptionOptionCheckboxCheckmarkSvgContainer {
+		display: none !important;
+	}
+	.quizOptionOptionCheckboxDotSvgContainer {
+		display: none !important;;
+	}
+}
+
+.quizOptionOptionCorrect .quizOptionOptionInnerContainer {
+	background-color: var(--quiz-option_correct_background-color) !important;
+	color: var(--quiz-option_correct_text-color) !important;
+}
+
+.quizOptionOptionCorrect .quizOptionOptionCheckboxSvgContainer {
+	background-color: var(--quiz-option_correct_icon-bg-color);
+	border-color: var(--quiz-option_correct_icon-bg-color);
+	color: var(--quiz-option_correct_icon-color);
+}
+
+.quizOptionOptionCorrect {
+	.quizOptionOptionCheckboxCloseSvgContainer {
+		display: none !important;
+	}
+	.quizOptionOptionCheckboxCheckmarkSvgContainer {
+		display: block !important;
+	}
+	.quizOptionOptionCheckboxDotSvgContainer {
+		display: none !important;;
+	}
+}
+
+
+.quizOptionOptionInput {
+	all: unset;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.quizOptionErrorCode {
+	margin: 0 !important;
+	background-color: var(--quiz_error_background-color);
+	color: var(--quiz_error_foreground-color);
+	border-radius: var(--quiz_error_corner-radius);
+	padding: var(--spc-3x);
+}
+
+.quizOptionLoading {
+	margin: 0 !important;
+	display: flex;
+	align-items: center;
+	color: var(--primary_default);
+}
+
+.quizOptionLoadingDotOne {
+	opacity: 0;
+	animation: quizOptionLoadingDotKeyframe 1.3s infinite;
+	animation-delay: 0s;
+}
+
+.quizOptionLoadingDotTwo {
+	opacity: 0;
+	animation: quizOptionLoadingDotKeyframe 1.3s infinite;
+	animation-delay: 0.2s;
+}
+
+.quizOptionLoadingDotThree {
+	opacity: 0;
+	animation: quizOptionLoadingDotKeyframe 1.3s infinite;
+	animation-delay: 0.3s;
+}
+
+@keyframes quizOptionLoadingDotKeyframe {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}

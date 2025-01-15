@@ -3,22 +3,11 @@ import { Element, Node, Parent, Text } from "hast";
 import { TabInfo, Tabs } from "./tabs";
 import { toString } from "hast-util-to-string";
 import { RehypeFunctionComponent } from "../types";
-
-const isNodeHeading = (n: Element) =>
-	n.type === "element" && /h[1-6]/.exec(n.tagName);
-
-const findLargestHeading = (nodes: Element[]) => {
-	let largestSize = Infinity;
-	for (const node of nodes) {
-		if (!isNodeHeading(node)) continue;
-		const size = parseInt(node.tagName.substring(1), 10);
-		largestSize = Math.min(largestSize, size);
-	}
-	return largestSize;
-};
-
-const isNodeLargestHeading = (n: Element, largestSize: number) =>
-	isNodeHeading(n) && parseInt(n.tagName.substring(1), 10) === largestSize;
+import {
+	findLargestHeading,
+	isNodeLargestHeading,
+	isNodeHeading,
+} from "../utils/headings";
 
 const getApproxLineCount = (nodes: Node[], inParagraph?: boolean): number => {
 	let lines = 0;

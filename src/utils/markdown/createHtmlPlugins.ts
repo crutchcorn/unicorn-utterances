@@ -34,6 +34,7 @@ import {
 	transformInContentAd,
 	transformTabs,
 } from "./components";
+import { transformQuizRadio } from "utils/markdown/components/quiz-radio/rehype-transform";
 
 const currentBranch = process.env.VERCEL_GIT_COMMIT_REF ?? (await branch());
 
@@ -114,6 +115,7 @@ export function createHtmlPlugins(unified: Processor) {
 					["no-ebook"]: ({ children }) => children,
 					["only-ebook"]: () => [],
 					tabs: transformTabs,
+					["quiz-radio"]: transformQuizRadio,
 				},
 			})
 			.use(rehypePlayfulElementMap)
