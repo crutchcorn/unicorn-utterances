@@ -46,6 +46,7 @@
 	display: flex;
 	flex-shrink: 0;
 	overflow: hidden;
+	align-self: flex-start;
 
 	&:where(img),
 	& img {
@@ -89,6 +90,10 @@
 	margin-top: var(--collection-card_author_padding-top);
 	margin-right: var(--collection-card_author_padding-right);
 	margin-left: var(--collection-card_author_padding-left);
+
+	&> :global(.button) {
+		align-self: flex-end;
+	}
 }
 
 .authorList {
