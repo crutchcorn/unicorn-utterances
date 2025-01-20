@@ -6,7 +6,7 @@ import {
 } from "./remark-process-frontmatter";
 import remarkEmbedder, { RemarkEmbedderOptions } from "@remark-embedder/core";
 import remarkGfm from "remark-gfm";
-import remarkUnwrapImages from "remark-unwrap-images";
+import rehypeUnwrapImages from "rehype-unwrap-images";
 import { TwitchTransformer } from "./remark-embedder-twitch";
 import oembedTransformer from "@remark-embedder/transformer-oembed";
 import remarkToRehype from "remark-rehype";
@@ -55,8 +55,6 @@ export function createHtmlPlugins(unified: Processor) {
 			} as never)
 			.use(remarkProcessFrontmatter)
 			.use(remarkGfm)
-			// Remove complaining about "div cannot be in p element"
-			.use(remarkUnwrapImages)
 			/* start remark plugins here */
 			.use(
 				remarkEmbedderDefault as never,
@@ -65,6 +63,8 @@ export function createHtmlPlugins(unified: Processor) {
 				} as RemarkEmbedderOptions,
 			)
 			.use(remarkToRehype, { allowDangerousHtml: true })
+			// Remove complaining about "div cannot be in p element"
+			.use(rehypeUnwrapImages)
 			// This is required to handle unsafe HTML embedded into Markdown
 			.use(rehypeRaw, { passThrough: ["mdxjsEsm"] })
 			// Do not add the tabs before the slug. We rely on some of the heading

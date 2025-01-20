@@ -1,4 +1,4 @@
-import { useRef, useState, useLayoutEffect } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 import { Fragment, RefObject } from "preact";
 import mainStyles from "./pagination.module.scss";
 import more from "src/icons/more_horiz.svg?raw";
