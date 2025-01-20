@@ -178,6 +178,9 @@ importers:
       hastscript:
         specifier: ^9.0.0
         version: 9.0.0
+      html-escaper:
+        specifier: ^3.0.3
+        version: 3.0.3
       husky:
         specifier: ^9.0.11
         version: 9.0.11
@@ -193,6 +196,9 @@ importers:
       junk:
         specifier: ^4.0.1
         version: 4.0.1
+      kleur:
+        specifier: ^4.1.5
+        version: 4.1.5
       lint-staged:
         specifier: ^15.2.7
         version: 15.2.7
@@ -238,6 +244,9 @@ importers:
       react-dom:
         specifier: npm:@preact/compat@17.1.2
         version: '@preact/compat@17.1.2(preact@10.23.2)'
+      rehype-parse:
+        specifier: 9.0.0
+        version: 9.0.0
       rehype-raw:
         specifier: ^7.0.0
         version: 7.0.0
@@ -7746,7 +7755,7 @@ snapshots:
       fs-extra: 11.2.0
       image-size: 1.1.1
       mime: 4.0.3
-      rehype-parse: 9.0.0
+      rehype-parse: 9.0.1
       rehype-stringify: 10.0.0
       unified: 11.0.5
       unist-util-visit: 5.0.0
