@@ -335,7 +335,10 @@ const people = new Map<string, PersonInfo[]>();
 for (const personId of await fs.readdir(contentDirectory)) {
 	if (!isNotJunk(personId)) continue;
 	const personPath = join(contentDirectory, personId);
-	people.set(personId, await readPerson(personPath));
+	const person = await readPerson(personPath);
+	if (person.length) {
+		people.set(personId, person);
+	}
 }
 
 const collections = new Map<string, CollectionInfo[]>();
@@ -348,12 +351,12 @@ for (const personId of [...people.keys()]) {
 
 	for (const slug of slugs) {
 		const collectionPath = join(collectionsDirectory, slug);
-		collections.set(
-			slug,
-			await readCollection(collectionPath, {
-				authors: [personId],
-			}),
-		);
+		const collection = await readCollection(collectionPath, {
+			authors: [personId],
+		});
+		if (collection.length) {
+			collections.set(slug, collection);
+		}
 	}
 }
 
@@ -373,13 +376,13 @@ for (const collection of [...collections.values()]) {
 
 	for (const slug of slugs) {
 		const postPath = join(postsDirectory, slug);
-		posts.set(
-			slug,
-			await readPost(postPath, {
-				authors: collection[0].authors,
-				collection: collection[0].slug,
-			}),
-		);
+		const post = await readPost(postPath, {
+			authors: collection[0].authors,
+			collection: collection[0].slug,
+		});
+		if (post.length) {
+			posts.set(slug, post);
+		}
 	}
 }
 for (const personId of [...people.keys()]) {
@@ -391,12 +394,12 @@ for (const personId of [...people.keys()]) {
 
 	for (const slug of slugs) {
 		const postPath = join(postsDirectory, slug);
-		posts.set(
-			slug,
-			await readPost(postPath, {
-				authors: [personId],
-			}),
-		);
+		const post = await readPost(postPath, {
+			authors: [personId],
+		});
+		if (post.length) {
+			posts.set(slug, post);
+		}
 	}
 }
 

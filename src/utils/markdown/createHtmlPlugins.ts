@@ -32,8 +32,10 @@ import {
 	rehypeTransformComponents,
 	transformFileTree,
 	transformInContentAd,
+	transformSnitip,
 	transformTabs,
 } from "./components";
+import { rehypeSnitipLinks } from "./snitip-link/rehype-transform";
 
 const currentBranch = process.env.VERCEL_GIT_COMMIT_REF ?? (await branch());
 
@@ -111,11 +113,13 @@ export function createHtmlPlugins(unified: Processor) {
 				components: {
 					filetree: transformFileTree,
 					["in-content-ad"]: transformInContentAd,
+					snitip: transformSnitip,
 					["no-ebook"]: ({ children }) => children,
 					["only-ebook"]: () => [],
 					tabs: transformTabs,
 				},
 			})
+			.use(rehypeSnitipLinks)
 			.use(rehypePlayfulElementMap)
 			// rehypeHeaderText must occur AFTER rehypeTransformComponents to correctly ignore headings in role="tabpanel" and <details> elements
 			.use(rehypeHeaderText)

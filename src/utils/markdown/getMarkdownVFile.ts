@@ -18,6 +18,7 @@ export async function getMarkdownVFile(
 		kind: data.kind,
 		file: data.file,
 		headingsWithIds: [],
+		snitips: new Map(),
 	};
 	return new VFile({
 		value: fileContent,

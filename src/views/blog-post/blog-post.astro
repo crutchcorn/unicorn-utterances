@@ -5,6 +5,7 @@ import MailingList from "../../components/mailing-list/mailing-list.astro";
 import TranslationsHeader from "../base/translations/translations-header.astro";
 import BlogPostLayout from "./blog-post-layout/blog-post-layout.astro";
 import HeadingLinkScript from "../base/scripts/heading-link-script.astro";
+import SnitipScript from "../base/scripts/snitip-script.astro";
 import { Icon } from "astro-icon/components";
 
 import type { MarkdownInstance } from "astro";
@@ -73,6 +74,7 @@ const GHLink = `https://github.com/${siteMetadata.repoPath}/tree/main/content/${
 	iFrameClickToRun();
 </script>
 <HeadingLinkScript />
+<SnitipScript />
 
 <main>
 	<BlogPostLayout hideLeftSidebar={!postHeadings.length}>
