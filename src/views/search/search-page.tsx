@@ -67,7 +67,7 @@ const fetchSearchFilters = async ({ signal }: { signal: AbortSignal }) => {
 	);
 };
 
-export function SearchPageBase() {
+export function SearchPageBase({siteTitle}:RootSearchPageProps) {
 	const [query, setQueryState] = useSearchParams<SearchQuery>(
 		serializeParams,
 		deserializeParams,
@@ -128,6 +128,10 @@ export function SearchPageBase() {
 		// Analytics go brr
 		plausible &&
 			plausible("search", { props: { searchVal: query.searchQuery } });
+
+		if (query.searchQuery) document.title = `${query.searchQuery} | ${siteTitle}`
+		else if (query.searchQuery === "*") {document.title = `Search all | ${siteTitle}`}
+		else {document.title = `Search | ${siteTitle}`}
 
 		return searchForTerm(query, signal);
 	}, [searchForTerm]);
@@ -461,11 +465,12 @@ export function SearchPageBase() {
 
 const queryClient = new QueryClient();
 
-export default function SearchPage() {
+interface RootSearchPageProps{siteTitle: string}
+export default function SearchPage({siteTitle}:RootSearchPageProps) {
 	return (
 		<OramaClientProvider>
 			<QueryClientProvider client={queryClient}>
-				<SearchPageBase />
+				<SearchPageBase siteTitle={siteTitle}/>
 			</QueryClientProvider>
 		</OramaClientProvider>
 	);
