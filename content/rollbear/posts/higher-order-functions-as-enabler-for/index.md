@@ -2,7 +2,7 @@
 {
   title: "Higher order functions as an enabler for lazy evaluation",
   published: "2017-01-08",
-  edited: "2017-01-08",
+  edited: "2024-12-12",
   tags: [ 'cpp' ]}
 ---
 
@@ -10,7 +10,7 @@ Yesterday's post about [Generating lambdas for clarity and performance](/posts/g
 showed how to make use of higher order functions to improve clarity while giving the optimiser a chance to improve
 performance, but the example used retained the original inflexible design.
 
-Here's a short recap. Given a struct Employee, there is a function that filters out developers based on their salary.
+Here's a short recap. Given a struct `Employee`, there is a function that filters out developers based on their salary.
 The original code looked like this:
 
 ```cpp
@@ -42,8 +42,10 @@ auto devs_who_make_at_least(const staff& s, unsigned floor)
 The code is by no means difficult to understand, but it lacks in flexibility, and loops like this spread over many
 places in the code base becomes a maintenance liability.
 
+# Improving the original
+
 Enter a kind of filter function template, that like the `devs_who_make_at_least()` function, returns a vector of
-pointers to the elements given, but using a provided predicate instead of a hard coded condition:
+[pointers](/posts/pointers-and-references-cpp) to the elements given, but using a provided predicate instead of a hard coded condition:
 
 ```cpp
 template <typename Container, typename Pred>
@@ -98,7 +100,9 @@ accumulated salary of those selected? It doesn't make sense to pay the cost of p
 all developers are needed, but you just need to browse through the selected ones until some other criteria is met? Then
 it is unnecessary to have populated the vector with all of them.
 
-Enter lazy evaluation. The idea is to create yet another level of indirection, and defer calling the predicate until the
+# Enter lazy evaluation
+
+The idea is to create yet another level of indirection, and defer calling the predicate until the
 actual iteration is done.
 
 What is wanted is something like this:
@@ -303,9 +307,10 @@ a vector with the remaining is a gain. However, in all fairness, it should be sa
 generality. The filter iterator shows much worse branch prediction results, and for large data sets, this can be
 noticeable.
 
+# Wrap-up
+
 There it is. Higher order functions are by no means a necessity for lazy evaluation, but when you have them, it's not a
 huge job to implement, and using it becomes natural. The lazy evaluation can give large performance gains, but there is
 an added complexity which may back fire.
 
-Expanding further on this sooner or later leads to a [range library](https://github.com/ericniebler/range-v3), but that
-is another story.
+Expanding further on this sooner or later leads to a [range library](https://github.com/ericniebler/range-v3), but that is another story.

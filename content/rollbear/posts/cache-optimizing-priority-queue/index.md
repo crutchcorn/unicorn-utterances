@@ -6,10 +6,11 @@
   tags: ['cpp']}
 ---
 
-I must begin with saying that if you found this because you have a performance problem, you should almost certainly look
-elsewhere. It is highly unlikely that your performance problem is caused by your priority queue. If, however, you are
+I must begin by saying that, ***if you found this because you have a performance problem, you should almost certainly look elsewhere.*** It is highly unlikely that your performance problem is caused by your priority queue. If, however, you are
 curious, or you have done careful profiling and found out that the cache characteristics of your priority queue are
-causing your performance problem, and you cannot fix that by altering your design, by all means read on.
+causing your performance problem - and you cannot fix that by altering your design - by all means read on.
+
+# Introduction
 
 A priority queue is typically implemented as a binary heap.
 The [`std::priority_queue<>`](http://en.cppreference.com/w/cpp/container/priority_queue) class template in the C++
@@ -27,18 +28,18 @@ The numbers next to the nodes are the node indexes. A interesting property of th
 parent is always half of the index of a child (rounded down.) Another interesting property of the binary heap is that it
 is always packed towards lower indexes. There are never any holes in the structure.
 
-If a new node is added, space is made for index 11. Then the new value is compared with that of the parent, i.e. index
-5. If the new value has higher priority, the parent is moved to index 11, and the new value is compared with the parent
-of index 5, i.e. index 2. If index 2 has higher priority, the new value is inserted at index 5 and the insertion is
+If a new node is added, space is made for index `11`. Then the new value is compared with that of the parent, i.e. index
+`5`. If the new value has higher priority, the parent is moved to index `11`, and the new value is compared with the parent
+of index `5`, i.e. index `2`. If index `2` has higher priority, the new value is inserted at index `5` and the insertion is
 done.
 
-Removing the highest priority element is more involved. When 'a' is removed above, index 1 becomes free, which is
-forbidden, so the child with highest priority is moved to it. So 'b' is moved to index 1 and index 3 becomes free. The
-child of index 3 with highest priority is 'c', which is moved to index 3, which makes index 6 free. Since index 6 has no
-children, the phase shifts to insertion of the last element at index 6. So the last element is compared with the parent
-of index 6, i.e. 3. Since index 3 (which now holds 'c') has higher priority than 'j', the job is done and 'j' is moved
-from index 10 to index 6. Index 10 becomes free, but since its the last element that is legal and the heap shrinks in
-size so that index 9 becomes the last element.
+Removing the highest priority element is more involved. When 'a' is removed above, index `1` becomes free, which is
+forbidden, so the child with highest priority is moved to it. So 'b' is moved to index `1` and index `3` becomes free. The
+child of index `3` with highest priority is 'c', which is moved to index `3`, which makes index 6 free. Since index `6` has no
+children, the phase shifts to insertion of the last element at index `6`. So the last element is compared with the parent
+of index `6`, i.e. `3`. Since index `3` (which now holds 'c') has higher priority than 'j', the job is done and 'j' is moved
+from index `10` to index `6`. Index `10` becomes free, but since its the last element that is legal and the heap shrinks in
+size so that index `9` becomes the last element.
 
 Both insertion and popping the top element are O(log2(n)).
 
@@ -84,7 +85,7 @@ space of 8 values and thus a whole cache line. The result is illustrated below.
 ![](./subheap8_cache_array.png)
 
 This is much better. The lower image illustrates the layout in an array where the numbers to the left are the array
-offset to the beginning of the mini-heap. Offset 0 in each mini-heap is not used, which makes the parent/child
+offset to the beginning of the mini-heap. Offset `0` in each mini-heap is not used, which makes the parent/child
 calculations within a mini-heap multiplication or division by 2. With mini-heap size of 8 (or any power of two) the
 checks for mini-heap root or last child in mini-heap becomes simple bit masking operations, which are very cheap.
 Calculating hops between mini-heaps is more elaborate, but is limited to multiplications or divisions by 8, and those

@@ -2,11 +2,12 @@
 {
   title: "Performance observations on a C++ vector of lambdas",
   published: "2015-06-05",
-  edited: "2015-06-07",
+  edited: "2024-12-12",
   tags: [ 'cpp' ]}
 ---
 
-> Edit 2015-Jun-7: The source code is available on [GitHub](https://github.com/rollbear/vector_lambda)
+> **Edit (June 2015)::** 
+> The source code is now available on [GitHub](https://github.com/rollbear/vector_lambda).
 
 When writing unit tests, you typically don't care much about execution speed, but compile time performance is important.
 After all, if building your unit test program takes 3 minutes, Test Driven Development becomes so painful it requires
@@ -81,8 +82,8 @@ The vector is not pre-reserved to capacity, which should not matter for compile 
 almost certainly impacts population time performance.
 
 The contenders in this shootout are *g++4.9*, *g++-5.1* and *clang++3.6*. *clang++* uses *libstdc++* from *g++4.9*. I
-have measurements with *clang++3.6* using *libc++*, but they came out so exceptionally unflattering that I suspect my *
-libc++ *installation is flawed somehow.
+have measurements with *clang++3.6* using *libc++*, but they came out so exceptionally unflattering that I suspect my 
+*libc++* installation is flawed somehow.
 
 The machine that the measurements are made on is an Intel X980 i7@3.33GHz with 12G ram, running X86_64 Gentoo.
 
@@ -195,8 +196,7 @@ All builds are with `-std=c++14 -O`
 This one is weird. For *g++4.9* and *g++5.1*, compilation times are slightly shorter with optimized builds using `std::
 function<>` than with unoptimized builds. *clang++3.6* on the other hand needs quite a long time to compile the source.
 Again the expected difference between `std::unique_ptr<>` to the interface and `std::unique_ptr<>` to the derived class
-is
-not seen.
+is not seen.
 
 
 <table>
@@ -227,7 +227,7 @@ not seen.
 </table>
 
 
-*Clang++3.6* works very hard with optimized builds using `std::function<>`. It looks bad when you glance at the graph,
+*clang++3.6* works very hard with optimized builds using `std::function<>`. It looks bad when you glance at the graph,
 but
 read the numbers - it shoots out above the graph an order of magnitude above that of the *g++* compilers, requiring a
 whopping 338 seconds to compile the source. The `std::unique_ptr<>` alternatives seem unaffected by optimization. For
@@ -349,7 +349,7 @@ Estimating performance is difficult, there is no other way to put it. That enabl
 time, as is shown with *g++* and `push_back()` of `std::function<>`, is baffling. That emplacement slows down
 compilation
 time is perhaps not surprising, but neither is the size of the cost obvious. `std::function<>` is very fast to call, at
-least in this example, but it is obviously costly to create both in run time and compilation time. *Clang++* choking
+least in this example, but it is obviously costly to create both in run time and compilation time. *clang++* choking
 completely on optimized builds with std::function<> is rather unexpected, and that it doesn't show any run time
 performance advantage for it is disappointing.
 

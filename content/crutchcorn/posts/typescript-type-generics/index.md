@@ -8,6 +8,11 @@
 }
 ---
 
+> **Note:**
+> If you're not yet familiar with TypeScript, we have an introductory article you should read!
+>
+> 📝 [**Introduction to TypeScript**](/posts/introduction-to-typescript)
+
 While working in various projects, you may come across a weird looking syntax in the codebase: `<>`. No no, not JSX, we're of course talking about type generics. They'll appear next to function calls (`callFn<T>()`), TypeScript types (`Array<any>`), and more.
 
 _Type generics are a way to handle abstract types in your function._ **They act as a variable for types in that they contain information about the way your types will function.** They're very powerful in their own right, and their usage is not just restricted to TypeScript. You'll see many of these concepts applied under very similar terminologies in various languages. Enough on that, however. Let's dive into how to use them! 🏊‍

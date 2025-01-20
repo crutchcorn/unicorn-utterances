@@ -15,7 +15,7 @@ Mutable means "can change". Immutable means "cannot change". And these meanings 
 
 It's important to note that this does not relate to a variable, but to a value. Constants are not always immutable, and non-constant variables are not always mutable.
 
-For example, objects in JavaScript are by default mutable, even if they're assigned to a constant variable. The following is valid TypeScript:
+For example, **objects in JavaScript are by default mutable**, even if they're assigned to a constant variable. The following is valid TypeScript:
 
 ```typescript
 const myObj = {
@@ -45,6 +45,11 @@ myObj = {
 ```
 
 And the same is the case with arrays.
+
+> **Learn more about object mutability:**
+> If you'd like to learn more about how mutability affects objects differently than other variables, we have an article for that!
+>
+> 📝 [**What is Object Mutation in JavaScript?**](/posts/object-mutation)
 
 # What is the problem with mutable variables?
 

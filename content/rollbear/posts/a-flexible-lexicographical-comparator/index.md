@@ -10,6 +10,8 @@ We've all hand crafted comparison operators for structs with many members, and w
 right for equality comparison, but lexicographical ordering relations is a different story when there are more than two
 members.
 
+# Using `std::tie()`
+
 Hopefully all C++ developers have by now learned about
 the [`std::tie()`](http://www.cppsamples.com/common-tasks/lexicographic-ordering.html)-idiom.
 
@@ -40,6 +42,8 @@ years employed, some times by... you get the idea.
 
 You can, of course, write comparator classes for each, implementing each function with `std::tie()` as above, but it's
 still a repetitive tedium. Isn't that what computers are good at?
+
+# Applying pointes to members
 
 What if we could create a comparator by listing the ordering relation and which members, like this?
 
@@ -136,6 +140,8 @@ All that is needed to reveal the magic is available, but only indirectly. A firs
 which will tell, as a constexpr which can be used as a template parameter, how many elements the parameter pack, and
 thus the `std::tuple\<Ms...>`, holds.
 
+# C++14 improvements
+
 C++14 introduced in the standard library a set of templates that are really handy for this. Two nearly indispensable
 tools are [`std::index\_sequence\<Ns...>`](http://en.cppreference.com/w/cpp/utility/integer_sequence) and its
 helper `std::make\_index\_sequence\<N>`.
@@ -231,6 +237,8 @@ the [empty base class optimization](http://en.cppreference.com/w/cpp/language/eb
 provide a comparator object that may hold state, and most state less comparators have no data, so it reduces the size of
 the comparator object slightly.
 
+# Performance
+
 What about performance then? After all, this is C++ and we care about performance, and also everybody knows that this
 type of encapsulated abstraction and templates cause bloat and kills the optimizer? Or?
 
@@ -312,5 +320,6 @@ _Z9is_sortedRKSt6vectorI1SSaIS0_EE:
 The entire loop is between `.L13` and `.L3`, and the two element comparison is between `.L6` and `.L8`. All overhead of
 indirection is gone. Compilers are good at this.
 
-I thought this was cool and just wanted to share. Work can be made to allow stateful comparators, and to ensure more
-helpful compiler error messages in case of usage mistakes.
+# Wrap-up
+
+I thought this was cool and just wanted to share. Work can be made to allow stateful comparators, and to ensure more helpful compiler error messages in case of usage mistakes.

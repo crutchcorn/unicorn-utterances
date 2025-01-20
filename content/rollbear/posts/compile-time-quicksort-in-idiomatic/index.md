@@ -1,13 +1,18 @@
 ---
 {
-  title: "Compile time quicksort in idiomatic modern C++",
+  title: "Compile time quick-sort in idiomatic modern C++",
   published: "2015-01-18",
-  edited: "2015-01-18",
+  edited: "2024-12-12",
   tags: [ 'cpp' ]}
 ---
 
+> *This article is outdated!:*
+> This article was written a very long time ago, and its contents no longer apply.
+>
+> Read the newer version [**by clicking here**](/posts/constexpr-quicksort-in-c17).
+
 A contender for the most useless program ever written just got a much needed overhaul. In
-2011 [I wrote about compile time quick sort](/posts/compile-time-quick-sort-using-c) as a challenge to myself, and as an
+2011 [I wrote about compile time quick-sort](/posts/compile-time-quick-sort-using-c) as a challenge to myself, and as an
 exercise in the then newfangled variadic templates. Now, having worked with C++11 for a few years, and lately also
 C++14, I see that the code I wrote then is unnecessarily clumsy and highly unidiomatic.
 
@@ -112,7 +117,7 @@ The output of running the program is:
 { 1 2 3 4 5 6 7 8 9 }
 ```
 
-so that is good.
+...Which is good.
 
 # Partitioning
 

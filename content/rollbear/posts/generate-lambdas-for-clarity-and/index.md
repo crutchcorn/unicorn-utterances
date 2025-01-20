@@ -2,7 +2,7 @@
 {
   title: "Generate lambdas for clarity and performance",
   published: "2017-01-07",
-  edited: "2017-01-14",
+  edited: "2024-12-12",
   tags: [ 'cpp' ]}
 ---
 
@@ -41,9 +41,13 @@ auto devs_who_make_at_least(const staff& s, unsigned floor)
 
 It's not very complex, and most C++ developers understand what it does in a few seconds. If this is the only place in
 the entire code base that elements are selected from a [vector](http://en.cppreference.com/w/cpp/container/vector) of
-Employees, then all is well. But what if there are several places? The code becomes cluttered with almost identical
+`Employee`s, then all is well.
+
+But what if there are several places? The code becomes cluttered with almost identical
 copies of the same loop. This screams algorithm. None in the standard library is a perfect fit, though. Let's hand roll
-a simple one:
+a simple one.
+
+# Building an algorithm
 
 ```cpp
 template <typename Container, typename Pred>
@@ -79,6 +83,8 @@ auto devs_who_make_at_least(const staff& s, unsigned floor)
 
 This is cool, but what if there's more than one place in the code where you want to select employees based on salary or
 title?
+
+# C++14 utilities
 
 C++14 introduced the auto return type, which is great for writing functions that generates lambdas.
 
@@ -134,6 +140,8 @@ auto megadevs = elements_matching(employees,
                                   pred_and(earns_at_least(1000000), 
                                            has_title("Developer")));
 ```
+
+# Performance
 
 So what about performance, then? Surely this magic has a cost in confusing the optimiser?
 
@@ -231,6 +239,8 @@ with[std::string](http://en.cppreference.com/w/cpp/string/basic_string):
 
 Here it's clear that gcc does a slightly worse job than clang with optimising the hand written loop, but does a
 substantially better job at optimising the higher order function version.
+
+# Wrap-up
 
 As can be seen, the exact result does vary between compilers, but the chances of losing any performance to speak of when
 using higher order functions are small, and there is the potential for very noticeable performance gains.

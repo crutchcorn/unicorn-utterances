@@ -2,14 +2,19 @@
 {
   title: "Compile time messages in C++",
   published: "2011-09-28",
-  edited: "2011-09-29",
+  edited: "2024-12-12",
   tags: ['cpp']}
 ---
 
-At times it's desirable to give a message at compile time. Sounds cheezy, eh? Well read on and find out.
+> *This article is outdated!:*
+> This article was written a very long time ago, and its contents no longer apply.
+>
+> Read the newer version [**by clicking here**](/posts/constexpr-quicksort-in-c17).
 
-As an example of the cheezy kind, the compile-time quick sort shown
-here [earlier](http://playfulprogramming.blogspot.com/2011/09/compile-time-quick-sort-using-c.html) contained an
+At times, it's desirable to give a message at compile time. Sounds cheesy, eh? Well, read on and find out.
+
+As an example of the cheesy kind, the compile-time quick sort shown
+here [**earlier**](./compile-time-quick-sort-using-c) contained an
 unnecessary run time element with a `main()` function, `for_each()` and a `print` template. It is possible to display
 all
 information at compile time by causing a compiler error, like this:
@@ -19,7 +24,7 @@ template <typename T>
 struct print;
 ```
 
-Use it by, for example, by referring to a member type.
+Use it by, for example, referring to a member type.
 
 Let's revisit the `list` and `concat` templates.
 

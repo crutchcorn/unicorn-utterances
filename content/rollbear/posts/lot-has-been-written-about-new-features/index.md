@@ -2,13 +2,15 @@
 {
   title: "Exploring time keeping in ISO C++ 2011",
   published: "2011-09-25",
-  edited: "2011-09-25",
+  edited: "2024-12-12",
   tags: [ 'cpp' ]}
 ---
 
 A lot has been written about new features coming in the 2011 revision of ISO C++. One that has received surprisingly
 little attention is the `<chrono>` header. The types and functions therein makes it so much simpler to write time
 keeping software. Its neat simple interface is, however, also problematic.
+
+# Introduction to `<chrono>`
 
 Here's a small example program that shows both neatness and problems:
 
@@ -72,6 +74,8 @@ The output is:
 1*1/1000000 seconds
 ```
 
+# The problem
+
 This computer's system clock uses microseconds to represent time.
 
 Herein lies one of the problems with `<chrono>`. The resolution of clocks must be known at compile time. This means that
@@ -96,7 +100,7 @@ calculation `std::chrono::high_precision_clock::now() - std::chrono::system_cloc
 returned both refer to the same type. The exact same code may not compile on another conforming compiler, if its library
 uses distinct types for those two clocks. I think that is unnecessary.
 
-Yet a problem is that the clock static member function `now()` must be declared `noexcept` to be standards conforming,
+Yet a problem is that the clock static member function `now()` must be declared `noexcept` to be standards-conforming,
 i.e. calling it must not cause any exception to be thrown. There is thus no possible way to check at run time if a clock
 is available or not. If the library supports it, it must be there and it must work. I think this is bad.
 

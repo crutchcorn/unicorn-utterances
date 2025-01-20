@@ -2,7 +2,7 @@
 {
   title: "Succinct and helpful C++ template compilation errors",
   published: "2016-05-18",
-  edited: "2016-05-24",
+  edited: "2024-12-12",
   tags: [ 'cpp' ]}
 ---
 
@@ -22,13 +22,13 @@ messages that explains to the user what went wrong.
 In all fairness, this technique is not my invention, and unfortunately I've forgotten where I first learned of it. If
 you know who pioneered it, please let me know so I can attribute it properly.
 
-> [edit: [Shafik Yaghmour](https://apis.google.com/wm/1/102200829211519225794) directed me to discussions
+> Edit: [Shafik Yaghmour](https://apis.google.com/wm/1/102200829211519225794) directed me to discussions
 > on [reddit](https://www.reddit.com/r/cpp/comments/4jybls/succinct_and_helpful_c_template_compilation_errors/) pointing
 > to [Eric Niebler](http://ericniebler.com/) being the likely originator of this technique, first used in
-> the [Boost](http://www.boost.org/)/[Proto](http://www.boost.org/doc/libs/1_61_0/doc/html/proto.html) library.]
+> the [Boost](http://www.boost.org/)/[Proto](http://www.boost.org/doc/libs/1_61_0/doc/html/proto.html) library.
 
-> [edit again: [Eric Niebler](http://ericniebler.com/)himself isn't entirely sure he pioneered the technique, but
-> this [youtube video](https://www.youtube.com/watch?v=JF6YM0XzHnE)makes it likely.]
+> Another edit: [Eric Niebler](http://ericniebler.com/) himself isn't entirely sure he pioneered the technique, but
+> this [YouTube video](https://www.youtube.com/watch?v=JF6YM0XzHnE) makes it likely.
 
 # Problem introduction
 
@@ -77,8 +77,7 @@ There's what clang++-3.8 says:
 There are three huge problems here:
 
 1. The highlighted problems refer to internal functions that, in a real world library, would likely be something that
-   the
-   user of the library never even knew existed.
+   the user of the library never even knew existed.
 2. The highlighted information doesn't say what failed. The complaint
    that `'double'` cannot be narrowed to `'char'` is true but nonsensical.
    The actual problem is that the entire parameter pack expansion cannot
@@ -90,7 +89,7 @@ There are three huge problems here:
 g++-5.2 does ever so slightly better in this case, in that the failing call site is the first line of the error list,
 but the rest of the problems are there for g++-5.2 as well.
 
-# `static_assert()`
+# Using `static_assert()`
 
 A popular method to give more information is to
 use [`static_assert()`](http://en.cppreference.com/w/cpp/language/static_assert). With it you can provide a helpful error
@@ -141,7 +140,7 @@ t.cpp:15:18: note: insert an explicit cast to silence this issue
 It is an improvement, but there is a lot of noise and disinformation. There is also the repetition of blaming the call
 to `do_with_string(3.1)` twice for different offenses.
 
-g++-5.2 is slightly better in that it doesn't try to give conflicting reasons for the failure, but the extra warnings
+G++-5.2 is slightly better in that it doesn't try to give conflicting reasons for the failure, but the extra warnings
 are misleading at best.
 
 ```
@@ -210,7 +209,7 @@ t.cpp:31:3: note: in instantiation of function template specialization 'do_with_
 
 Excellent!
 
-g++-5.2 is equally helpful:
+G++-5.2 is equally helpful:
 
 ```
 t.cpp: In instantiation of ‘void do_with_string(T&& ...) [with T = {double}]’:
@@ -222,6 +221,8 @@ t.cpp:23:3: error: static assertion failed: it must be possible to form a std::s
 
 Both give the helpful message, and the source of the failing call, and not much else, and specifically no misleading
 messages from internal functions that the user doesn't even know about.
+
+# Wrap-up
 
 Unfortunately I do not feel comfortable enough with concepts to show examples in a future C++, but perhaps someone else
 can complement this post and write an alternative article from the viewpoint of a concepts world?

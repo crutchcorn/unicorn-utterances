@@ -1,8 +1,8 @@
 ---
 {
-  title: "Introducing the Trompeloeil C++ Mocking framework",
+  title: "Introducing the Trompeloeil C++ mocking framework",
   published: "2014-12-13",
-  edited: "2014-12-13",
+  edited: "2024-12-12",
   tags: [ 'cpp', 'testing' ]}
 ---
 
@@ -18,7 +18,7 @@ clang-3.5 are known to work.) It is a single header file only, so there is no ne
 compatibility issues between the test code and the framework. [Trompeloeil](https://github.com/rollbear/trompeloeil) is
 released under the BOOST SOFTWARE LICENSE 1.0.
 
-# Simple Example
+# Simple example
 
 Let's dive in to mocking with [Trompeloeil](https://github.com/rollbear/trompeloeil) by writing tests for the order
 class of a warehouse, following the example in [Martin Fowler](http://martinfowler.com/)'s
@@ -138,7 +138,7 @@ TEST(filling_does_not_remove_if_not_in_stock)
 }
 ```
 
-# Expectations and Fixtures
+# Expectations and fixtures
 
 This is straight forward, but there is a problem with repetition between the two tests. Let's refactor the code by
 breaking out the common code.
@@ -281,8 +281,8 @@ is OK to never call `remove`, since the minimum number of calls is 0, which is t
 call `hasInventory` many many times before `remove`, and then call `hasInventory` again followed by further calls
 to `remove`.
 
-# Wrap up
+# Wrap-up
 
-Please give [Trompeloeil](https://github.com/rollbear/trompeloeil) a try and give feedback (or better yet, join the job
-and submit improvements.) My experience is that its use of direct expressions/statements in the expectations together
+Please give [Trompeloeil](https://github.com/rollbear/trompeloeil) a try and give feedback - or better yet, join the job
+and submit improvements! My experience is that its use of direct expressions/statements in the expectations together
 with the strict control of deadline for a match through the normal C++ lifetime rules makes it very easy to work with.

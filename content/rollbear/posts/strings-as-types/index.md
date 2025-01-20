@@ -1,10 +1,15 @@
 ---
 {
-  title: "strings as types",
+  title: "Expressing strings as types",
   published: "2013-03-31",
-  edited: "2013-03-31",
+  edited: "2024-12-12",
   tags: [ 'cpp' ]}
 ---
+
+> *This article is outdated!:*
+> This article was written a very long time ago, and its contents no longer apply.
+>
+> Read the newer version [**by clicking here**](/posts/strings-as-types-with-c17-constexpr).
 
 As odd as it may seem, I have more than once felt the need to express a string literal as a unique type which can be
 used as a any class.
@@ -43,7 +48,7 @@ int main()
 }
 ```
 
-When run, the output is
+When run, the output is:
 
 ```shell
 \> ./test1

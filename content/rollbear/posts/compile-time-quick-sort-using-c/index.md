@@ -1,21 +1,21 @@
 ---
 {
-  title: "Compile time quick sort using C++ variadic templates",
+  title: "Compile time quick-sort using C++ variadic templates",
   published: "2011-09-23",
-  edited: "2015-06-04",
+  edited: "2024-12-12",
   tags: ['cpp']}
 ---
 
-> Edit June 4th 2015: This article is very dated. Read this [revisiting article](/compile-time-quicksort-in-idiomatic)
-> for a far better solution
+> *This article is outdated!:*
+> This article was written a very long time ago, and its contents no longer apply.
+>
+> Read the newer version [**by clicking here**](/posts/constexpr-quicksort-in-c17).
 
-C++ is a strange language. In many ways it's a crap language, but it's a very fun crap language to use. It's also a very
-powerful one, especially the templates. Now that ISO C++ 2011 has brought variadic templates, it becomes easier to use
-and requires less typing.
+C++ is a strange language. In many ways it's a terrible language, but it's a very fun terrible language. It's also a very powerful one — especially its templates. Now that ISO C++ 2011 has brought variadic templates, it becomes easier to use and requires less typing.
 
-I decided to explore variadic templattes, and I thought one way of exploring it was to express a compile-time
-quick-sort. Note that I didn't set out to explore if it can be done - that I was certain of. I set out to explore if I
-can do it, and I very specifically decided not to check what others had done as I had no illusions of being the first.
+# Exploring variadic templates
+
+I decided to go into variadic templates, and I thought one way of exploring it was to express a compile-time quick-sort. Note that I didn't set out to find out if it could be done — that I was certain of - but to know whether I could do it, and I very specifically decided not to check what others had done as I had no illusions of being the first.
 
 The first problem to solve was that of expressing a list of numbers.
 
@@ -24,8 +24,8 @@ template <typename T, T... elems>
 struct list;
 ```
 
-That's all that is required. The second template parameter is a list of zero or more elements of type T. That's
-what "..." denotes.
+That's all that is required. The second template parameter is a list of zero or more elements of type `T`. That's
+what `...` denotes.
 
 Its use is simple:
 
@@ -34,11 +34,13 @@ typedef list<int, 3, 8, 69, 2> integers;
 typedef list<char, 'c', 'h', 'a', 'r', 's', '\n'> word;
 ```
 
-That the template is only declared, not defined, is not a mistake. It's not a problem that the types are incomplete and
-can't be instantiated. Instantiated objects are a run time thing, and this is about compile time computation.
+The fact that the template is only declared, but not defined, is not a mistake. It's not a problem that the types are incomplete and
+can't be instantiated. Instantiated objects are a runtime thing, and this is about compile time computation.
 
 It is, however, a good idea to be able to show what a list of numbers looks like, so a function to print the list is
 handy. More handy is a mechanism to call a function for every value in the list, in order.
+
+## Specializations
 
 Specializing function templates is still a no-go, but the classic forwarding to a helper class works.
 
@@ -74,10 +76,10 @@ The first specialization calls the function provided in the `apply` member funct
 and then recurses to do the same with the tail of the list. The second specialization ends the recursion by handling an
 empty list.
 
-> Ah the memories. This time of the year, in 1989, I was in university and took my first academic programming course - "
-> Functional Programming with Standard ML." I thought I had a good idea about programming, but boy was I wrong. Who
-> would've known that I'd find that course useful for C++ 22 years later? The programming technique is the same. The
-> syntax is far worse in C++, though.
+> Ah, the memories. At this time of the year, in 1989, I was in university and took my first academic programming course - "Functional Programming with Standard ML."
+> I thought I had a good idea about programming, but boy, was I wrong.
+> Who would've known that I'd find that course useful for C++ 22 years later? The programming technique is the same.
+> The syntax is far worse in C++, though.
 
 As a convenience, a function template is added:
 
@@ -89,7 +91,7 @@ void foreach(F f = F())
 }
 ```
 
-The thing with the default parameter is just so that the function can either be called with an object, or using a type
+The default parameter is just so that the function can either be called with an object, or using a type
 that is instantiated. It's just convenient. A small test program shows why.
 
 ```cpp
@@ -124,6 +126,10 @@ chars
 Not very exciting, I admit, but it shows that the list works and that traversing it works. In all test programs to
 follow, the `print` struct is presumed available.
 
+---
+
+# Setup
+
 In order to implement a quick sort on the lists, two things must be possible to do with them, partitioning and
 concatenating them.
 
@@ -150,11 +156,11 @@ struct concat<list<T, elems...> >
 };
 ```
 
-Local `typedef:`s galore in template meta programming, otherwise the lines becomes way too long to see properly.
+You may notice there's a local `typedef:`s galore in template meta programming, otherwise the lines becomes way too long to see properly.
 
 The recursion is the same pattern, but here it is all about creating new types.
 
-Another simple program shows the use
+Another simple program shows its usage:
 
 ```cpp
 int main()
@@ -166,7 +172,7 @@ int main()
 }
 ```
 
-The output is
+The output of the code is the following:
 
 ```
 2 4 8 3 5 7 
@@ -179,7 +185,7 @@ technique, not about managing messy code, so I decided to go for filtering inste
 read and understand.
 
 The filter template solution takes a predicate and a list. The predicate picks the elements to keep. Doing this first
-requires a simple helper, the `if_else` template. I was pretty certain that this one made it to the standard library,
+requires a simple helper; the `if_else` template. I was pretty certain that this one made it to the standard library,
 but perhaps I was wrong. At least I can't find it.
 
 ```cpp
@@ -197,6 +203,8 @@ struct if_else<false, T, F>
 
 It's not very complicated. The template accepts a boolean value and two types. The typedef is the first type when the
 boolean value is true, and the second type otherwise.
+
+## Filtering
 
 With this, the filter template is reasonably straight forward as it follows a by now familiar pattern.
 
@@ -226,7 +234,7 @@ The predicate is a template that provides a boolean value given a type and an in
 over the elements of the list, and uses `if_else` to select either only the tail, or the selected value concatenated
 with the tail.
 
-A simple program demonstrates.
+A simple program demonstrates this behavior.
 
 ```cpp
 template <typename T, T t>
@@ -253,7 +261,7 @@ It seems like the filtering works.
 Quick sort is now only about picking a pivot element, and filtering the elements from the list that are smaller and
 those that aren't into separate lists, quick sort the lists and concatenate the results.
 
-To be generic, though, the sort order should be defined by a comparison template. A reasonable comparison template is
+To be generic, though, the sort order should be defined by a comparison template. A reasonable comparison template is:
 
 ```cpp
 template <typename T, T l, T r>
@@ -280,7 +288,7 @@ struct bind
 };
 ```
 
-The template parameter C is the comparison template, and the member template `pred` is the resulting predicate.
+The template parameter `C` is the comparison template, and the member template `pred` is the resulting predicate.
 
 It can be used like this:
 
@@ -294,16 +302,18 @@ int main()
 }
 ```
 
-The output is
+The output is:
 
 ```
 8 9 2 1 0 3 
 ```
 
-Presumably it works.
+Presumably, it works.
 
 Now, for the quick sort, both the set selected by the predicate, and its complement, must be available. A simple way to
-get the complement is to negate the predicate. Enter another helper template.
+get the complement is to negate the predicate.
+
+Enter another helper template.
 
 ```cpp
 template <template <typename U, U> class Pred>
@@ -317,9 +327,9 @@ struct neg
 };
 ```
 
-The template parameter Pred is the predicate to negate, and the member template pred, is the negated predicate to use.
+The template parameter `Pred` is the predicate to negate, and the member template `pred`, is the negated predicate to use.
 
-A simple variation of the previous example program is
+A simple variation of the previous example program is:
 
 ```cpp
 int main()
@@ -332,11 +342,15 @@ int main()
 }
 ```
 
-Unsurprisingly the output is
+Unsurprisingly, the output is:
 
 ```
 23 11 23 512 
 ```
+
+---
+
+# Quick-sorting
 
 Now, finally, all the bits and pieces are there. It's just a matter of assembling them to a quick sort template
 
@@ -395,12 +409,12 @@ int main()
 }
 ```
 
-The result (drumroll)
+The resul is... *(drumroll)*:
 
 ```
 0 1 2 3 8 9 11 23 23 512 
 ```
 
-Quick sort in compile time using C++ variadic templates. Now how useless is that?
+Quick sort in compile time using C++ variadic templates. *Now how useless is that?*
 
-Hope you enjoyed the show!
+**Hope you enjoyed the show!**

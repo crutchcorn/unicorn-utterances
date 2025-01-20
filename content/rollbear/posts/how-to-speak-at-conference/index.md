@@ -2,7 +2,7 @@
 {
   title: "How to speak at a conference",
   published: "2018-11-29",
-  edited: "2018-11-29",
+  edited: "2024-12-12",
   tags: [ 'opinion' ]}
 ---
 
@@ -17,12 +17,15 @@ Cool!
 
 This is not wrong, by the way.
 
-But... how do you get accepted? I'm sorry, but I don't have any great advice here, but I can tell you what little I know
-from my limited experience.
+But... how do you get accepted? I'm sorry, but I don't have any great advice here, but I can tell you what little I know from my limited experience.
 
-First, and very important thing to keep in mind: You're not being rejected, you're just not being accepted. Not being
-accepted means that competition is fierce, and other talks, on your chosen topic, were deemed more interesting than
-yours, or that your chosen topic did not quite match the conference. Not being accepted doesn't mean you suck. It means
+# Dealing with rejection
+
+First, and very important thing to keep in mind: **You're not being rejected, you're just not being accepted.**
+
+Not being accepted means that competition is fierce, and other talks, on your chosen topic, were deemed more interesting than yours, or that your chosen topic did not quite match the conference.
+
+Not being accepted doesn't mean you suck. It means
 other talks were considered more interesting, and there's no shame in that. It obviously doesn't feel good if your
 proposal wasn't accepted, but keep at it, refine your proposal, and try again. Maybe with the same topic from another
 angle, or perhaps another topic, perhaps another conference?
@@ -32,8 +35,9 @@ same.
 
 Let's start with two examples.
 
+# Example 1
+
 First the abstract. This is what the committee decides from, and also what's visible to the attendees to the conference.
-The first example (so far two Nay and no Yay):
 
 > The Curiously Recurring Coupled Types Pattern.
 >
@@ -64,6 +68,8 @@ structure for the talk:
 > - Show how to write a simple affine space strong type template.
 > - Parallels to unit systems
 
+# Example 2
+
 Here's the abstract for another talk that was accepted:
 
 > Programming with Contracts in C++20
@@ -79,16 +85,16 @@ Here's the abstract for another talk that was accepted:
 > good contracts can be written, because contracts have effects on interface
 > design. Warning: Parts of the contents are personal opinion.
 
-and its outline:
+And its outline:
 
 > Brief intro to the ideas behind Design by Contract Show what the current
 > draft standard supports, including strengths, weaknesses and missing
 > features. Propose rules of thumb for "best practices" with contracts in
 > C++20. Show some gotchas to look out for.
 
-Is there a take away message from this?
+# Is there a takeaway from this?
 
-I think there are two take away messages.
+I think there are two takeaway messages.
 
 1. It pays to think about how you want your talk to look like in the conference programme. This is difficult, and (at
    least for me) takes a disproportionate amount of time. It's only 100 or so words, after all, but expressing an idea
@@ -97,16 +103,27 @@ I think there are two take away messages.
    and vice versa. Keep trying (and if not offered, ask for why the proposal wasn't accepted - chances are there's
    valuable information there.)
 
-If you get email saying your talk has been accepted, then congratulations, it is time for the big work to begin. Think
-about how you best get your ideas across. Who is your audience? How knowledgeable are they about your topic? Watch a
+If you get email saying your talk has been accepted, then congratulations! It is time for the big work to begin. Think
+about how you best get your ideas across.
+
+Who is your audience? How knowledgeable are they about your topic? 
+
+Watch a
 number of presentations you have liked, and study how the presenter does it. There are many different techniques.
-Shamelessly steal techniques you think works well, and note what's problematic so that you can avoid it. Writing the
+
+Shamelessly steal techniques you think works well, and note what's problematic so that you can avoid it.
+
+Writing the
 presentation material does (for me) take a huge amount of time, and I keep revisiting it over and over, polishing for
-better narrative, fixing bugs, improving visual style. One difficult thing to estimate is how long it takes to deliver
+better narrative, fixing bugs, improving visual style. 
+
+One difficult thing to estimate is how long it takes to deliver
 the talk. Aim for filling your slot reasonably well. It's not nice to overshoot, but it's also rude to your audience and
 the conference organiser if you use up considerably less time than has been set aside for you. The only way to learn how
 long it takes is to do it (after you have done it a few times, you get a feel for your slide-rate, but for your first
-talk, you obviously have no idea.) Dry run the talk for yourself. Leave space for audience interaction. Practice on your
+talk, you obviously have no idea.)
+
+Dry run the talk for yourself. Leave space for audience interaction. Practice on your
 colleagues. If it's a conference talk, try do do a practice run for your local user group. Solicit feedback, and improve
 your presentation even more. Some speakers like to rehearse the talk very much, others prefer to improvise more. Find
 out what works for you.
@@ -115,4 +132,4 @@ And, finally... **you** have things to say. **You** have experiences that are wo
 valuable to others, but only if you share them. Speaking at conferences or local user groups isn't the only way to share
 experiences, but don't dismiss it, OK?
 
-Share your experiences.
+**Share your experiences.**

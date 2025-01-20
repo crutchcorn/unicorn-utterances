@@ -47,7 +47,7 @@ Item bat = new Item();
 
 The heap is where you have to be the most careful because even after termination of the program, whatever you placed on the heap will still be there. This is what creates memory leaks, it's a good rule to know that whenever you call the **new** or **malloc()** keywords, you need an equal number of **delete** or **free()** keywords present.
 
-You will most likely use the heap when you want to create something with a higher scope, or if you want to access it dynamically. That means that your spot on the stack is a set size, but when you create something on the heap it can be any size that you want. The downside is that C uses pointers that sit on the stack in order to access the heap so it will end up being much slower.
+You will most likely use the heap when you want to create something with a higher scope, or if you want to access it dynamically. That means that your spot on the stack is a set size, but when you create something on the heap it can be any size that you want. The downside is that C uses [pointers](/posts/pointers-and-references-cpp) that sit on the stack in order to access the heap so it will end up being much slower.
 
 ## Putting it together
 
@@ -98,9 +98,9 @@ int main() {
 }
 ```
 
-Just so we understand what is going on here, I created a global vector pointer that I did not define. Therefore it is just on the stack represented as a '0'. When example1() is called it allocates memory for vec on the heap and instantiates a vector with all zeros. You can access the vector using the memory address on the stack. When I print out just "vec" it will print out the memory address of the location on the heap where it is stored, when I call *vec it then goes to that memory location on the heap. More on pointers in a later article.
+Just so we understand what is going on here, I created a global vector pointer that I did not define. Therefore it is just on the stack represented as a '0'. When **example1()** is called it allocates memory for vec on the heap and instantiates a vector with all zeros. You can access the vector using the memory address on the stack. When I print out just "vec" it will print out the memory address of the location on the heap where it is stored, when I call *vec it then goes to that memory location on the heap. **[To learn more about pointers, read this article](/posts/pointers-and-references-cpp)**.
 
-The other method, example2(), just creates a new local vector and sets vec equal to it. You'll see why this is problematic later on. When the program is run in the order example1() -> example2() everything will work fine. And here is the output:
+The other method, **example2()**, just creates a new local vector and sets vec equal to it. You'll see why this is problematic later on. When the program is run in the order **example1()** -> **example2()** everything will work fine. And here is the output:
 
 ```
 0
@@ -114,7 +114,7 @@ The other method, example2(), just creates a new local vector and sets vec equal
 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 ```
 
-**But**, when you call it in the other order, calling example2() first, this is what happens...
+**But**, when you call it in the other order, calling **example2()** first, this is what happens...
 
 ```
 0

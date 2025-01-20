@@ -1,17 +1,21 @@
 ---
 {
-  title: "strings as types with c++17 constexpr lambdas",
+  title: "Expressing strings as types with C++17 constexpr lambdas",
   published: "2016-08-25",
-  edited: "2016-08-25",
+  edited: "2024-12-12",
   tags: [ 'cpp' ]}
 ---
 
 Recently I stumbled upon a question by [@arne_mertz](https://twitter.com/arne_mertz)
-of [Simplify C++](http://arne-mertz.de/) fame (if you don't read that blog, start now!) about using string literals as
-types. In 2013 I wrote about [strings as types](/posts/strings-as-types), and the technique used works, but it's not
+of [Simplify C++](http://arne-mertz.de/) fame — if you don't read that blog, start now! — about using string literals as
+types.
+
+In 2013 I wrote about [**strings as types**](/posts/strings-as-types), and the technique used works, but it's not
 exactly elegant.
 
-The problem is to get from `"string literal"`, to something like
+# The problem
+
+To get from `"string literal"` to something like:
 
 ```cpp
 template <char... c>
@@ -23,7 +27,9 @@ class String
 String<'s', 't', 'r', 'i', 'n', 'g', ' ', 'l', 'i', 't', 'e', 'r', 'a', 'l'>
 ```
 
-This, it turns out, is not very easy.
+***This, it turns out, is not very easy.***
+
+## C++11 utilities
 
 C±±11 gave us [`constexpr`](http://en.cppreference.com/w/cpp/language/constexpr) functions, and C++14 added some helpful
 utilities like [`integer_sequence<>`](http://en.cppreference.com/w/cpp/utility/integer_sequence), and from there you may
@@ -48,6 +54,8 @@ constexpr auto make_string_type(char const (&array)[N], std::index_sequence<I...
 Unfortunately things aren't that simple. Although `make_string()` is `constexpr`, the parameter `array` loses its `constexpr`
 property in the function, so `operator[]` does not give a `constexpr` result, and thus `String<array[I]...>` is ill formed
 and gives a compilation error.
+
+## Workaround
 
 A possible way to get around that, is to let the macro create and call a lambda, and have the lambda contain the string
 literal.
@@ -147,5 +155,11 @@ The above is perhaps not obvious, but at line 12, the address to the beginning o
 
 Line 25 shows that the buffer is the string `"nonsense"`.
 
-So, there is no run time overhead what so ever. However, each unique string used is its own symbol, which may increase
+---
+
+# Wrap-up
+
+With this solution, there is no run time overhead what so ever. However, each unique string used is its own symbol, which may increase
 link time, and the compile time computation required to get the string from the string, is of course not for free.
+
+Hope you enjoyed the article!

@@ -1,19 +1,19 @@
 ---
 {
-  title: "Sequence Control with the Trompeloeil C++ Mocking Framework",
+  title: "Sequence control with the Trompeloeil C++ mocking framework",
   published: "2015-01-06",
-  edited: "2015-01-06",
+  edited: "2024-12-12",
   tags: [ 'cpp', 'testing' ]}
 ---
 
 ![](./trompeloeil-logo.png)
 
-As previously [introduced]([/posts/introducing-trompeloeil-c-mocking.html),
+As previously [introduced](/posts/introducing-trompeloeil-c-mocking.html),
 the [Trompeloeil](https://github.com/rollbear/trompeloeil) C++ framework is a new mocking framework for C++14. If you're
 not at all familiar with [Trompeloeil](https://github.com/rollbear/trompeloeil), you may want to read
 the [introductory](/posts/introducing-trompeloeil-c-mocking.html) first.
 
-# Quick Recap
+# Quick recap
 
 Before diving in to the topic of sequence control, here comes a brief recapitulation
 of [Trompeloeil](https://github.com/rollbear/trompeloeil).
@@ -49,7 +49,7 @@ In this post, I will use the term *expectation* to mean any
 of `REQUIRE_CALL()`, `ALLOW_CALL()`, `FORBID_CALL()`, `NAMED_REQUIRE_CALL()`, `NAMED_ALLOW_CALL()`
 and `NAMED_FORBID_CALL()`.
 
-# Setting up the Scene
+# Setting up the scene
 
 The example used in this post is a `MessageDispatcher` that reads messages from a `DataReader` and calls observers with
 the received messages. The observers can subscribe and unsubscribe to receiving messages.
@@ -81,7 +81,7 @@ public:
 };
 ```
 
-# Default Sequencing
+# Default sequencing
 
 By default, expectations on different mock objects and different member functions are unrelated and any order
 permutation is equally good, as long as all expectations are met by the end of their surrounding scope. Several
@@ -134,7 +134,7 @@ the payload, and finishes with checking if more data is available. The expectati
 problem since the implementation would be unlikely to call it with the correct message unless it has read it properly.
 The order between the call to the observer and `reader.available()` is irrelevant.
 
-# Constrained Sequences
+# Constrained sequences
 
 A fixed version with constraints on the matching sequence of expectations could look like:
 
@@ -180,9 +180,7 @@ The sequence object created on line 15, is used to impose a strict order on the 
 27.) Now only the expectation for `obs.message()` on line 29 is unconstrained, the other three must occur in the stated
 order, or a violation is reported.
 
-#
-
-# Interleaved Sequences
+# Interleaved sequences
 
 Let's up the ante and verify that several messages can be read in one go, and that an observer can unsubscribe in
 the `message` member function. This is considerably longer, but despair not, an explanation follows.
@@ -281,11 +279,11 @@ references to `obs3_seq` are for reads.
 
 A graphic representation of allowed sequences may be viewed as follows:
 
-![](./sequence_graph.png)
+<img src="./sequence_graph.png" style="background-color: var(--primary90); border-radius: var(--corner-radius_xl;)" />
 
-# Wrap up
+# Wrap-up
 
-By default calls to unrelated mock objects and unrelated member functions on a mock object have no restrictions on the
+By default, calls to unrelated mock objects and unrelated member functions on a mock object have no restrictions on the
 order of matched calls, while expectations to the same member function of the same mock object are tried in reverse
 order of creation, until a match is found.
 
@@ -295,5 +293,5 @@ same mock object.
 
 Using several sequence you can describe interleaved sequences that may, but need not, have common points. This allows
 you to restrict the test exactly as much as necessary, but also allows you to relax the test as much as desired, to
-allow for flexibility in implementation (for example, you typically don't want to impose an order of objects visited
-from a hash-table.)
+allow for flexibility in implementation; for example, you typically don't want to impose an order of objects visited
+from a hash-table.

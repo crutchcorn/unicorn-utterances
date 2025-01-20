@@ -1,7 +1,7 @@
 ---
 {
 	title: "What do file extensions do?",
-	description: "A file extension isn't the only way a file is inditified, so what does it do?",
+	description: "A file extension isn't the only way a file is identified, so what does it do?",
 	published: "2020-07-11T20:58:16.292Z",
 	edited: "2020-07-11T20:58:16.292Z",
 	tags: ["computer science"],
